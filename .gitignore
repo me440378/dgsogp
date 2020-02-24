@@ -1,2 +1,4 @@
-/venv
+/venv/
 /dgsogp_django/frontend/node_modules/
+/.idea/
+*/__pycache__
