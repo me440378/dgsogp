@@ -1,30 +1,35 @@
-# # from django.shortcuts import render
 from django.http import HttpResponse
 
-# # from rest_framework import viewsets
 from rest_framework.views import APIView
+from rest_framework.response import Response
+import json
 
-# # from backend.serializers import UsersSerializer
-# # from backend.models import Users
+from backend.services import UsersService
 
-# # class UsersView(viewsets.ModelViewSet):
 class UsersView(APIView):
-# # 	"""
-# # 	API endpoint that allows users to be viewed or edited.
-# # 	"""
-# # 	queryset = Users.objects.all().order_by('-date_joined')
-# # 	serializer_class = UsersSerializer
 
 	def get(self, request):
-		return HttpResponse("Helworld. Yo're at the polls index.")
+		result = UsersService.getAll()
+		return Response(result)
+
+	def post(self, request):
+		json_bytes = request.body
+		json_str = json_bytes.decode()
+		json_dict = json.loads(json_str)
+		result = UsersService.register(**json_dict)
+		return Response(result)
 
 
-class PasswordView(UsersView):
+class UsersDetailView(APIView):
+	pass
+
+class PasswordView(APIView):
 
 	def get(self, request):
-		return HttpResponse("password!")
+		return HttpResponse(md5hash("password!"))
 
-class ForcePasswordView(UsersView):
+
+class ForcePasswordView(APIView):
 
 	def get(self, request):
 		return HttpResponse("forcepassword!")
