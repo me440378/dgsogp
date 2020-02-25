@@ -1,2 +1,3 @@
-from rest_framework import serializers
 from .UsersSerializer import *
+from .DatasourcesSerializer import *
+from .MetadataSerializer import *

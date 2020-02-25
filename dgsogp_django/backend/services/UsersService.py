@@ -8,7 +8,7 @@ class UsersService():
 	def register(username, password, nickname):
 		re = None
 		try:
-			re = Users.objects.using('admin_db').usfilter(username = username)
+			re = Users.objects.using('admin_db').filter(username = username)
 		except Exception as e:
 			return reply(1, str(e))
 

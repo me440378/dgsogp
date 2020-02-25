@@ -94,6 +94,7 @@ DATABASES = {
 }
 
 DATABASE_ROUTERS = ['dgsogp_django.DatabaseAppsRouter.DatabaseAppsRouter']
+
 DATABASE_APPS_MAPPING = {
     'sqlite3': 'default',
     'admin_db': 'admin_db',
