@@ -82,13 +82,22 @@ DATABASES = {
         'PASSWORD': '123456', #密码
         'HOST': '127.0.0.1', #主机
         'PORT': '3306', #端口
-    }
+    },
+    'data_db': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'dgsogp_data_db',
+        'USER': 'dgsogp_data',   #账户名
+        'PASSWORD': '123456', #密码
+        'HOST': '127.0.0.1', #主机
+        'PORT': '3306', #端口
+    },
 }
 
 DATABASE_ROUTERS = ['dgsogp_django.DatabaseAppsRouter.DatabaseAppsRouter']
 DATABASE_APPS_MAPPING = {
     'sqlite3': 'default',
     'admin_db': 'admin_db',
+    'data_db': 'data_db',
 }
 
 # Password validation
