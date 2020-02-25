@@ -1,4 +1,6 @@
 /venv/
 /dgsogp_django/frontend/node_modules/
 /.idea/
-*/__pycache__
+*/__pycache__/
+#python 忽略 .pyc .pyo .pyd 后缀的文件
+*.py[cod]

@@ -9,7 +9,7 @@ from backend.services import UsersService
 class UsersView(APIView):
 
 	def get(self, request):
-		result = UsersService.getAll()
+		result = UsersService.readAll()
 		return Response(result)
 
 	def post(self, request):
@@ -21,15 +21,49 @@ class UsersView(APIView):
 
 
 class UsersDetailView(APIView):
-	pass
+
+	def get(self, request, id):
+		result = UsersService.readOne(id)
+		return Response(result)
+
+	def put(self, request, id):
+		json_bytes = request.body
+		json_str = json_bytes.decode()
+		json_dict = json.loads(json_str)
+		result = UsersService.updateOne(id, json_dict)
+		return Response(result)
+
+	def delete(self, request, id):
+		result = UsersService.deleteOne(id)
+		return Response(result)
+
 
 class PasswordView(APIView):
 
-	def get(self, request):
-		return HttpResponse(md5hash("password!"))
+	def put(self, request, id):
+		json_bytes = request.body
+		json_str = json_bytes.decode()
+		json_dict = json.loads(json_str)
+		result = UsersService.updatePassword(id, **json_dict)
+		return Response(result)
 
 
 class ForcePasswordView(APIView):
 
-	def get(self, request):
-		return HttpResponse("forcepassword!")
+	def put(self, request, id):
+		json_bytes = request.body
+		json_str = json_bytes.decode()
+		json_dict = json.loads(json_str)
+		result = UsersService.updateForcePassword(id, **json_dict)
+		return Response(result)
+
+
+class LoginView(APIView):
+
+	def post(self, request):
+		json_bytes = request.body
+		json_str = json_bytes.decode()
+		json_dict = json.loads(json_str)
+		result = UsersService.login(**json_dict)
+		return Response(result)
+

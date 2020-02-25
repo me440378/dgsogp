@@ -25,7 +25,7 @@ class UsersService():
 				return reply(1, str(e))
 		return reply(0)
 
-	def getAll():
+	def readAll():
 		re = None
 		try:
 			re = Users.objects.all()
@@ -34,3 +34,63 @@ class UsersService():
 			return reply(1, str(e))
 		return result.data
 		
+	def readOne(id):
+		re = None
+		try:
+			re = Users.objects.get(pk = id)
+			result = UsersSerializer(re)
+		except Exception as e:
+			return reply(1, str(e))
+		return result.data
+	
+	def updateOne(id, kvdict):
+		try:
+			Users.objects.filter(pk = id).update(**kvdict)
+		except Exception as e:
+			return reply(1, str(e))
+		return reply(0)
+
+	def deleteOne(id):
+		try:
+			Users.objects.filter(pk = id).delete()
+		except Exception as e:
+			return reply(1, str(e))
+		return reply(0)
+
+	def updatePassword(id, oldpassword, newpassword):
+		re = None
+		try:
+			re = Users.objects.get(pk = id)
+		except Exception as e:
+			return reply(1, str(e))
+		password = re.password
+		if not password == md5hash(oldpassword):
+			return reply(1, '旧密码错误')
+		kvdict = {"password": md5hash(newpassword)}
+		try:
+			Users.objects.filter(pk = id).update(**kvdict)
+		except Exception as e:
+			return reply(1, str(e))
+		return reply(0)
+
+	def updateForcePassword(id, newpassword):
+		kvdict = {"password": md5hash(newpassword)}
+		try:
+			Users.objects.filter(pk = id).update(**kvdict)
+		except Exception as e:
+			return reply(1, str(e))
+		return reply(0)
+
+	def login(username, password):
+		re = None
+		try:
+			re = Users.objects.get(username = username)
+		except Exception as e:
+			return reply(1, '该用户不存在或数据库繁忙中')
+
+		userid = re.id
+		dbpassword = re.password
+		if not dbpassword == md5hash(password):
+			return reply(1, '密码不正确')
+		else:
+			return {"error": 0, "userid": userid}
