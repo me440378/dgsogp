@@ -11,4 +11,5 @@ class Metadata(models.Model):
 
     class Meta:
         managed = False
+        app_label = 'admin_db'
         db_table = 'metadata'

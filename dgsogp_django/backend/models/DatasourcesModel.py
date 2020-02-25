@@ -9,4 +9,5 @@ class Datasources(models.Model):
 
     class Meta:
         managed = False
+        app_label = 'admin_db'
         db_table = 'datasources'

@@ -8,7 +8,7 @@ class UsersService():
 	def register(username, password, nickname):
 		re = None
 		try:
-			re = Users.objects.filter(username = username)
+			re = Users.objects.using('admin_db').usfilter(username = username)
 		except Exception as e:
 			return reply(1, str(e))
 
@@ -16,7 +16,7 @@ class UsersService():
 			return reply(1, '该用户名已存在')
 		else:
 			try:
-				user = Users.objects.create(
+				user = Users.objects.using('admin_db').create(
 					username = username,
 					nickname = nickname,
 					password = md5hash(password),
@@ -28,7 +28,7 @@ class UsersService():
 	def readAll():
 		re = None
 		try:
-			re = Users.objects.all()
+			re = Users.objects.using('admin_db').all()
 			result = UsersSerializer(re, many = True)
 		except Exception as e:
 			return reply(1, str(e))
@@ -37,7 +37,7 @@ class UsersService():
 	def readOne(id):
 		re = None
 		try:
-			re = Users.objects.get(pk = id)
+			re = Users.objects.using('admin_db').get(pk = id)
 			result = UsersSerializer(re)
 		except Exception as e:
 			return reply(1, str(e))
@@ -45,14 +45,14 @@ class UsersService():
 	
 	def updateOne(id, kvdict):
 		try:
-			Users.objects.filter(pk = id).update(**kvdict)
+			Users.objects.using('admin_db').filter(pk = id).update(**kvdict)
 		except Exception as e:
 			return reply(1, str(e))
 		return reply(0)
 
 	def deleteOne(id):
 		try:
-			Users.objects.filter(pk = id).delete()
+			Users.objects.using('admin_db').filter(pk = id).delete()
 		except Exception as e:
 			return reply(1, str(e))
 		return reply(0)
@@ -60,7 +60,7 @@ class UsersService():
 	def updatePassword(id, oldpassword, newpassword):
 		re = None
 		try:
-			re = Users.objects.get(pk = id)
+			re = Users.objects.using('admin_db').get(pk = id)
 		except Exception as e:
 			return reply(1, str(e))
 		password = re.password
@@ -68,7 +68,7 @@ class UsersService():
 			return reply(1, '旧密码错误')
 		kvdict = {"password": md5hash(newpassword)}
 		try:
-			Users.objects.filter(pk = id).update(**kvdict)
+			Users.objects.using('admin_db').filter(pk = id).update(**kvdict)
 		except Exception as e:
 			return reply(1, str(e))
 		return reply(0)
@@ -76,7 +76,7 @@ class UsersService():
 	def updateForcePassword(id, newpassword):
 		kvdict = {"password": md5hash(newpassword)}
 		try:
-			Users.objects.filter(pk = id).update(**kvdict)
+			Users.objects.using('admin_db').filter(pk = id).update(**kvdict)
 		except Exception as e:
 			return reply(1, str(e))
 		return reply(0)
@@ -84,7 +84,7 @@ class UsersService():
 	def login(username, password):
 		re = None
 		try:
-			re = Users.objects.get(username = username)
+			re = Users.objects.using('admin_db').get(username = username)
 		except Exception as e:
 			return reply(1, '该用户不存在或数据库繁忙中')
 
