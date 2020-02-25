@@ -4,4 +4,4 @@ from backend.models import Metadata
 class MetadataSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Metadata
-		fields = ('id', 'wgroup', 'wserver', 'type', 'source')
+		fields = ('id', 'amount', 'feature', 'hashsum', 'type', 'format', 'datasource_id')
