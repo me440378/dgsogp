@@ -21,12 +21,11 @@
                 </el-card>
                 <el-card shadow="hover" style="height:252px;">
                     <div slot="header" class="clearfix">
-                        <span>语言详情</span>
-                    </div>Vue
-                    <el-progress :percentage="71.3" color="#42b983"></el-progress>JavaScript
-                    <el-progress :percentage="24.1" color="#f1e05a"></el-progress>CSS
-                    <el-progress :percentage="13.7"></el-progress>HTML
-                    <el-progress :percentage="5.9" color="#f56c6c"></el-progress>
+                        <span>Hadoop集群运行状况</span>
+                    </div>磁盘容量
+                    <el-progress :percentage="71.3" color="#42b983"></el-progress>CPU使用率
+                    <el-progress :percentage="24.1" color="#f1e05a"></el-progress>内存使用率
+                    <el-progress :percentage="13.7"></el-progress>
                 </el-card>
             </el-col>
             <el-col :span="16">
@@ -34,10 +33,10 @@
                     <el-col :span="8">
                         <el-card shadow="hover" :body-style="{padding: '0px'}">
                             <div class="grid-content grid-con-1">
-                                <i class="el-icon-lx-people grid-con-icon"></i>
+                                <i class="el-icon-lx-global grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">1234</div>
-                                    <div>用户访问量</div>
+                                    <div class="grid-num">4</div>
+                                    <div>服务器数量</div>
                                 </div>
                             </div>
                         </el-card>
@@ -45,10 +44,10 @@
                     <el-col :span="8">
                         <el-card shadow="hover" :body-style="{padding: '0px'}">
                             <div class="grid-content grid-con-2">
-                                <i class="el-icon-lx-notice grid-con-icon"></i>
+                                <i class="el-icon-lx-location grid-con-icon"></i>
                                 <div class="grid-cont-right">
                                     <div class="grid-num">321</div>
-                                    <div>系统消息</div>
+                                    <div>数据源数量</div>
                                 </div>
                             </div>
                         </el-card>
@@ -56,10 +55,10 @@
                     <el-col :span="8">
                         <el-card shadow="hover" :body-style="{padding: '0px'}">
                             <div class="grid-content grid-con-3">
-                                <i class="el-icon-lx-goods grid-con-icon"></i>
+                                <i class="el-icon-lx-tag grid-con-icon"></i>
                                 <div class="grid-cont-right">
                                     <div class="grid-num">5000</div>
-                                    <div>数量</div>
+                                    <div>元数据数量</div>
                                 </div>
                             </div>
                         </el-card>
@@ -67,7 +66,7 @@
                 </el-row>
                 <el-card shadow="hover" style="height:403px;">
                     <div slot="header" class="clearfix">
-                        <span>待办事项</span>
+                        <span>最近数据信息</span>
                         <el-button style="float: right; padding: 3px 0" type="text">添加</el-button>
                     </div>
                     <el-table :show-header="false" :data="todoList" style="width:100%;">
@@ -176,42 +175,46 @@ export default {
             options: {
                 type: 'bar',
                 title: {
-                    text: '最近一周各品类销售图'
+                    text: '昨天Hadoop集群平均运行状况'
                 },
                 xRorate: 25,
-                labels: ['周一', '周二', '周三', '周四', '周五'],
+                labels: ['磁盘容量', 'CPU使用率', '内存使用率'],
                 datasets: [
                     {
-                        label: '家电',
-                        data: [234, 278, 270, 190, 230]
+                        label: 'Server-00',
+                        data: [234, 278, 270]
                     },
                     {
-                        label: '百货',
-                        data: [164, 178, 190, 135, 160]
+                        label: 'Server-01',
+                        data: [164, 178, 190]
                     },
                     {
-                        label: '食品',
-                        data: [144, 198, 150, 235, 120]
+                        label: 'Server-02',
+                        data: [144, 198, 150]
+                    },
+                    {
+                        label: 'Server-03',
+                        data: [234, 178, 135]
                     }
                 ]
             },
             options2: {
                 type: 'line',
                 title: {
-                    text: '最近几个月各品类销售趋势图'
+                    text: '前五天Hadoop集群服务器平均运行状况'
                 },
-                labels: ['6月', '7月', '8月', '9月', '10月'],
+                labels: ['前5天', '前4天', '前3天', '前天', '昨天'],
                 datasets: [
                     {
-                        label: '家电',
+                        label: '磁盘容量占比',
                         data: [234, 278, 270, 190, 230]
                     },
                     {
-                        label: '百货',
+                        label: 'CPU使用率',
                         data: [164, 178, 150, 135, 160]
                     },
                     {
-                        label: '食品',
+                        label: '内存使用率',
                         data: [74, 118, 200, 235, 90]
                     }
                 ]

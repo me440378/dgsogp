@@ -20,14 +20,14 @@ export default new Router({
                     meta: { title: '系统首页' }
                 },
                 {
+                    path: '/users',
+                    component: () => import(/* webpackChunkName: "user" */ '../components/pages/UsersManage.vue'),
+                    meta: { title: '用户管理' }
+                },
+                {
                     path: '/icon',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/Icon.vue'),
                     meta: { title: '自定义图标' }
-                },
-                {
-                    path: '/table',
-                    component: () => import(/* webpackChunkName: "table" */ '../components/page/BaseTable.vue'),
-                    meta: { title: '基础表格' }
                 },
                 {
                     path: '/tabs',
@@ -62,18 +62,6 @@ export default new Router({
                     path: '/charts',
                     component: () => import(/* webpackChunkName: "chart" */ '../components/page/BaseCharts.vue'),
                     meta: { title: 'schart图表' }
-                },
-                {
-                    // 拖拽列表组件
-                    path: '/drag',
-                    component: () => import(/* webpackChunkName: "drag" */ '../components/page/DragList.vue'),
-                    meta: { title: '拖拽列表' }
-                },
-                {
-                    // 拖拽Dialog组件
-                    path: '/dialog',
-                    component: () => import(/* webpackChunkName: "dragdialog" */ '../components/page/DragDialog.vue'),
-                    meta: { title: '拖拽弹框' }
                 },
                 {
                     // 权限页面

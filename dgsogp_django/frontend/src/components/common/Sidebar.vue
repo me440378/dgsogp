@@ -62,9 +62,9 @@ export default {
                     title: '系统首页'
                 },
                 {
-                    icon: 'el-icon-lx-cascades',
-                    index: 'table',
-                    title: '基础表格'
+                    icon: 'el-icon-lx-people',
+                    index: 'users',
+                    title: '用户管理'
                 },
                 {
                     icon: 'el-icon-lx-copy',
@@ -109,21 +109,6 @@ export default {
                     icon: 'el-icon-pie-chart',
                     index: 'charts',
                     title: 'schart图表'
-                },
-                {
-                    icon: 'el-icon-rank',
-                    index: '6',
-                    title: '拖拽组件',
-                    subs: [
-                        {
-                            index: 'drag',
-                            title: '拖拽列表'
-                        },
-                        {
-                            index: 'dialog',
-                            title: '拖拽弹框'
-                        }
-                    ]
                 },
                 {
                     icon: 'el-icon-lx-warn',
