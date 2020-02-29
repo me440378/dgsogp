@@ -25,9 +25,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    #RESTful
     'rest_framework',
-
+    #定时任务
+    'django_crontab',
     'backend.apps.BackendConfig',
 ]
 
@@ -66,6 +67,10 @@ STATICFILES_DIRS = [
 
 WSGI_APPLICATION = 'dgsogp_django.wsgi.application'
 
+# Crontab
+CRONJOBS = [
+    ('*/2 * * * *', 'backend.cronjobs.testjob'),
+]
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
