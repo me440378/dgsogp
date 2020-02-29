@@ -4,14 +4,13 @@ from backend.tools import reply
 
 class MetadataService():
 
-	def createOne(amount, feature, hashsum, type, format, datasource_id):
+	def createOne(source, hashsum, datasource_id, amount = None, feature = None):
 		try:
 			metadata = Metadata.objects.using('admin_db').create(
+				source = source,
 				amount = amount,
 				feature = feature,
 				hashsum = hashsum,
-				type = type,
-				format = format,
 				datasource_id = datasource_id,
 			)
 		except Exception as e:

@@ -1,14 +1,14 @@
 from django.db import models
 
-class Metadata(models.Model):
+class Hadoopsources(models.Model):
     id = models.IntegerField(primary_key=True)
+    dbstate = models.IntegerField()
+    state = models.IntegerField()
     source = models.CharField(max_length=255)
-    amount = models.IntegerField(blank=True, null=True)
-    feature = models.IntegerField(blank=True, null=True)
-    hashsum = models.CharField(max_length=255)
     datasource_id = models.IntegerField()
+    format = models.CharField(max_length=45)
 
     class Meta:
         managed = False
         app_label = 'backend'
-        db_table = 'metadata'
+        db_table = 'hadoopsources'

@@ -4,13 +4,19 @@ from backend.tools import reply
 
 class DatasourcesService():
 	
-	def createOne(wgroup, wserver, type, source = None):
+	def createOne(wgroup, wserver, type, source, related, state, putindb = None, pattern = None, target = None, tag = None):
 		try:
 			datasource = Datasources.objects.using('admin_db').create(
 				wgroup = wgroup,
 				wserver = wserver,
 				type = type,
 				source = source,
+				putindb = putindb,
+				related = related,
+				pattern = pattern,
+				target = target,
+				state = state,
+				tag = tag,
 			)
 		except Exception as e:
 			return reply(1, str(e))
