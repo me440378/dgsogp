@@ -8,6 +8,8 @@ from backend.views import ForcePasswordView
 from backend.views import LoginView
 from backend.views import DatasourcesView
 from backend.views import DatasourcesDetailView
+from backend.views import HadoopsourcesView
+from backend.views import HadoopsourcesDetailView
 from backend.views import MetadataView
 from backend.views import MetadataDetailView
 
@@ -23,6 +25,9 @@ urlpatterns = [
     ##DatasourcesView
     path(r'datasources', DatasourcesView.as_view()),
     re_path(r'datasources/(?P<id>\d+)', DatasourcesDetailView.as_view()),
+    ##HadoopsourcesView
+    path(r'hadoopsources', HadoopsourcesView.as_view()),
+    re_path(r'hadoopsources/(?P<id>\d+)', HadoopsourcesDetailView.as_view()),
     ##MetadataView
     path(r'metadata', MetadataView.as_view()),
     re_path(r'metadata/(?P<id>\d+)', MetadataDetailView.as_view()),

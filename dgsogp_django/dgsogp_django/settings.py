@@ -70,6 +70,9 @@ WSGI_APPLICATION = 'dgsogp_django.wsgi.application'
 # Crontab
 CRONJOBS = [
     ('*/2 * * * *', 'backend.cronjobs.testjob'),
+    ('0 0 * * *', 'backend.cronjobs.collectDataFromServers'),
+    ('0 0 * * *', 'backend.cronjobs.scanHadoopPutInDB'),
+    ('0 0 * * *', 'backend.cronjobs.scanHadoopTagMetadata'),
 ]
 
 # Database
