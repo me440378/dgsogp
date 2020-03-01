@@ -1,12 +1,4 @@
-from .collectDataFromServers import *
-from .scanDatasourcesToHadoop import *
-from .scanHadoopPutInDB import *
-from .scanHadoopTagMetadata import *
-
-def testjob():
-	import time
-	print('crontab-test 2min print1,{}'.format(time.time()))
-
+import paramiko
 #从工作服务器采集到hadoop集群
 def collectDataFromServers():
 	pass
@@ -20,4 +12,3 @@ def collectDataFromServers():
 	# 			是
 	# 				从本地目录写入hdfs
 	# 					未处理的将处理状态改为已完成
-

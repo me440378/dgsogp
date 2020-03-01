@@ -6,7 +6,9 @@ class Metadata(models.Model):
     amount = models.IntegerField(blank=True, null=True)
     feature = models.IntegerField(blank=True, null=True)
     hashsum = models.CharField(max_length=255)
-    datasource_id = models.IntegerField()
+    hadoopsource_id = models.IntegerField()
+    format = models.CharField(max_length=45)
+    state = models.IntegerField()
 
     class Meta:
         managed = False

@@ -4,14 +4,12 @@ from backend.tools import reply
 
 class HadoopsourcesService():
 
-	def createOne(dbstate, state, source, datasource_id, format):
+	def createOne(state, source, datasource_id):
 		try:
 			Hadoopsources = Hadoopsources.objects.using('admin_db').create(
-				dbstate = dbstate,
 				state = state,
 				source = source,
 				datasource_id = datasource_id,
-				format = format,
 			)
 		except Exception as e:
 			return reply(1, str(e))

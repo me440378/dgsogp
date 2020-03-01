@@ -26,3 +26,4 @@
 */*.sln
 */*.sw*
 
+dgsogp_django/backend/cronjobs/tmp/

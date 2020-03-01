@@ -11,7 +11,8 @@ class Datasources(models.Model):
     pattern = models.IntegerField(blank=True, null=True)
     target = models.CharField(max_length=255, blank=True, null=True)
     state = models.IntegerField()
-    tag = models.CharField(max_length=255, blank=True, null=True)
+    content = models.CharField(max_length=255, blank=True, null=True)
+    excepted = models.IntegerField()
 
     class Meta:
         managed = False
