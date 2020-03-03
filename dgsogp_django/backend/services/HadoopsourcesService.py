@@ -6,7 +6,7 @@ class HadoopsourcesService():
 
 	def createOne(state, source, datasource_id):
 		try:
-			Hadoopsources = Hadoopsources.objects.using('admin_db').create(
+			hadoopsources = Hadoopsources.objects.using('admin_db').create(
 				state = state,
 				source = source,
 				datasource_id = datasource_id,

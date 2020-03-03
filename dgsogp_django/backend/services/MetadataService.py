@@ -4,7 +4,7 @@ from backend.tools import reply
 
 class MetadataService():
 
-	def createOne(source, hashsum, hadoopsource_id, format, state,  amount = None, feature = None):
+	def createOne(source, hashsum, hadoopsource_id, format, state, amount = None, feature = None):
 		try:
 			metadata = Metadata.objects.using('admin_db').create(
 				source = source,

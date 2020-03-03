@@ -1,7 +1,6 @@
 from .collectDataFromServers import *
-from .scanDatasourcesToHadoopsources import *
-from .scanHadoopPutInDB import *
 from .scanHadoopTagMetadata import *
+from .scanMetadataPutInDB import *
 
 def testjob():
 	import time

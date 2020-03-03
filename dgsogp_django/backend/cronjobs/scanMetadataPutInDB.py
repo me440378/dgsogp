@@ -1,5 +1,5 @@
 #扫描hadoop集群上的文件，入库
-def scanHadoopPutInDB():
+def scanMetadataPutInDB():
 	pass
 	# 判断hadoopsources的dbstate
 	# 已完成

@@ -1,7 +1,10 @@
+import os
+import shutil
 import paramiko
 from hdfs import InsecureClient
 
 from backend.services import DatasourcesService
+from backend.services import HadoopsourcesService
 from backend.tools import get_all_files_in_remote_dir
 from backend.tools import makeLocalPath
 from backend.tools import makeHdfsPath
@@ -41,7 +44,15 @@ def collectDataFromServers():
 				hpath = hadoopGaS + target#/dev/server/iris.data
 				hpathDir = getDir(hpath)#/dev/server
 				makeHdfsPath(HadoopClient, hpathDir)
-				HadoopClient.upload(hpath, local)
+				HadoopClient.upload(hpath, local, overwrite=True)
+				#完成远程到本地到Hadoop集群的流程了
+				#之后要生成HadoopSource
+				datasource_id = Datasources['id']
+				HadoopsourcesService.createOne(0, hadoopGaS + target, datasource_id)
+				#将状态为未处理的Datasources改为已完成
+				if state == 0:
+					kvdict = {"state":2}
+					DatasourcesService.updateOne(datasource_id, kvdict)
 			elif type == 1:
 				# 目录
 				localRootDir = localGaS + target#./tmp/ops/server/python
@@ -58,8 +69,16 @@ def collectDataFromServers():
 					hpath = hadoopGaS + target + remote[len(remoteDir):]
 					hpathDir = getDir(hpath)
 					makeHdfsPath(HadoopClient, hpathDir)
-					HadoopClient.upload(hpath, local)
+					HadoopClient.upload(hpath, local, overwrite=True)
 				SftpClint.close()
+				#完成远程到本地到Hadoop集群的流程了
+				#之后要生成HadoopSource
+				datasource_id = Datasources['id']
+				HadoopsourcesService.createOne(0, hadoopGaS + target, datasource_id)
+				#将状态为未处理的Datasources改为已完成
+				if state == 0:
+					kvdict = {"state":2}
+					DatasourcesService.updateOne(datasource_id, kvdict)
 			elif type == 2:
 				# 数据库，先不用管
 				pass
@@ -78,8 +97,26 @@ def getSftpClient(wserver):
 def getHadoopClient():
 	return InsecureClient('http://hadoop-server-test:50070', user='hadoop', root='/')
 
-def putOnHadoop():
-	pass
 
-def genHadoopSources():
-	pass
+def freeLocalBaseDir():
+	localBase = r'./tmp'
+	for wgroup in os.listdir(localBase):
+		for wserver in os.listdir(''.join([localBase, '/', wgroup])):
+			for f in os.listdir(''.join([localBase, '/', wgroup, '/', wserver])):
+				fullf = ''.join([localBase, '/', wgroup, '/', wserver, '/', f])
+				deleteFileOrDir(fullf)
+					
+
+def deleteFileOrDir(Dir):
+    if os.path.isdir(Dir):
+        paths = os.listdir(Dir)
+        for path in paths:
+            filePath = os.path.join(Dir, path)
+            if os.path.isfile(filePath):
+                os.remove(filePath)
+            elif os.path.isdir(filePath):
+                shutil.rmtree(filePath,True)
+        os.rmdir(Dir)
+    else:
+    	os.remove(Dir)
+
