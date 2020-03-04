@@ -1,23 +1,32 @@
-import os
-from hdfs import InsecureClient
-
 from backend.services import DatasourcesService
 from backend.services import HadoopsourcesService
 from backend.services import MetadataService
+
+#hash
 from backend.tools import filemd5hash
-from backend.tools import get_all_files_in_hadoop_dir
+#hdfs
+from backend.tools import getHadoopClient
+from backend.tools import getAllFilesInHadoopDir
+#local
 from backend.tools import makeSureLocalFile
+from backend.tools import makeLocalPath
+from backend.tools import LOCAL_BASE
+#cronjobtool
+from backend.tools import getMetadataFormat
+from backend.tools import getMetadataState
+from backend.tools import getMetadataAmount
+from backend.tools import getMetadataFeature
 
 #扫描hadoop集群上的文件，标记
 def scanHadoopTagMetadata():
 	HadoopsourcesList = HadoopsourcesService.readAll()
 	for Hadoopsources in HadoopsourcesList:
 		# 判断hadoopsources的state
-		hadoopsource_id = Hadoopsources['id']
 		hstate = Hadoopsources['state']
 		if (hstate == 0) or (hstate == 1):
-			#未处理、处理中
+			# 未处理、处理中
 			# 记录hadoopsources的source，datasourceid
+			hadoopsource_id = Hadoopsources['id']
 			source = Hadoopsources['source']
 			datasource_id = Hadoopsources['datasource_id']
 			# datasource为文件还是目录
@@ -26,22 +35,22 @@ def scanHadoopTagMetadata():
 			putindb = Datasources['putindb']
 			related = Datasources['related']
 			type = Datasources['type']
-			localBase = r'./tmp'
 			if type == 0:
 				#文件
-				local = localBase + source
-				client = InsecureClient('http://hadoop-server-test:50070', user='hadoop', root='/')
+				local = LOCAL_BASE + source
 				if makeSureLocalFile(local):
 					pass
 				else:
-					client.download(source, local)
+					makeLocalPath(local[:local.rindex('/')])
+					HadoopClient = getHadoopClient()
+					HadoopClient.download(source, local, overwrite=True)
+				hashsum = filemd5hash(local)
+				format = getMetadataFormat(local)
+				mstate = getMetadataState(dstate, putindb)
 				if related == 0:
 					#关系型
 					amount = getMetadataAmount(local)
 					feature = getMetadataFeature(local, ',')
-					hashsum = filemd5hash(local)
-					format = getMetadataFormat(local)
-					mstate = getMetadataState(dstate, putindb)
 					metadata = {
 						"source":source,
 						"amount":amount,
@@ -54,12 +63,8 @@ def scanHadoopTagMetadata():
 					MetadataService.createOne(**metadata)
 					#将状态为未处理的Datasources改为已完成
 					if hstate == 0:
-						kvdict = {"state":2}
-						HadoopsourcesService.updateOne(hadoopsource_id, kvdict)
+						HadoopsourcesService.finishOne(hadoopsource_id)
 				elif related == 1:
-					hashsum = filemd5hash(local)
-					format = getMetadataFormat(local)
-					mstate = getMetadataState(dstate, putindb)
 					metadata = {
 						"source":source,
 						"hashsum":hashsum,
@@ -70,26 +75,26 @@ def scanHadoopTagMetadata():
 					MetadataService.createOne(**metadata)
 					#将状态为未处理的Datasources改为已完成
 					if hstate == 0:
-						kvdict = {"state":2}
-						HadoopsourcesService.updateOne(hadoopsource_id, kvdict)
+						HadoopsourcesService.finishOne(hadoopsource_id)
 			elif type == 1:
 				#目录
 				#扫描文件
-				client = InsecureClient('http://hadoop-server-test:50070', user='hadoop', root='/')
-				hdfsList = get_all_files_in_hadoop_dir(client, source)
+				HadoopClient = getHadoopClient()
+				hdfsList = getAllFilesInHadoopDir(HadoopClient, source)
 				for hdfsfile in hdfsList:
-					local = localBase + hdfsfile
+					local = LOCAL_BASE + hdfsfile
 					if makeSureLocalFile(local):
 						pass
 					else:
-						client.download(hdfsfile, local)
+						makeLocalPath(local[:local.rindex('/')])
+						HadoopClient.download(hdfsfile, local, overwrite=True)
+					hashsum = filemd5hash(local)
+					format = getMetadataFormat(local)
+					mstate = getMetadataState(dstate, putindb)
 					if related == 0:
 						#关系型
 						amount = getMetadataAmount(local)
 						feature = getMetadataFeature(local, ',')
-						hashsum = filemd5hash(local)
-						format = getMetadataFormat(local)
-						mstate = getMetadataState(dstate, putindb)
 						metadata = {
 							"source":hdfsfile,
 							"amount":amount,
@@ -100,14 +105,10 @@ def scanHadoopTagMetadata():
 							"state":mstate,
 						}
 						MetadataService.createOne(**metadata)
-						#将状态为未处理的Datasources改为已完成
+						#将状态为未处理的Hadoopsources改为已完成
 						if hstate == 0:
-							kvdict = {"state":2}
-							HadoopsourcesService.updateOne(hadoopsource_id, kvdict)
+							HadoopsourcesService.finishOne(hadoopsource_id)
 					elif related == 1:
-						hashsum = filemd5hash(local)
-						format = getMetadataFormat(local)
-						mstate = getMetadataState(dstate, putindb)
 						metadata = {
 							"source":hdfsfile,
 							"hashsum":hashsum,
@@ -116,44 +117,10 @@ def scanHadoopTagMetadata():
 							"state":mstate,
 						}
 						MetadataService.createOne(**metadata)
-						#将状态为未处理的Datasources改为已完成
+						#将状态为未处理的Hadoopsources改为已完成
 						if hstate == 0:
-							kvdict = {"state":2}
-							HadoopsourcesService.updateOne(hadoopsource_id, kvdict)
+							HadoopsourcesService.finishOne(hadoopsource_id)
 		elif hstate == 2:
-			#已完成，不用管
+			# 已完成，不用管
 			pass
 
-
-def getMetadataAmount(File):
-	count = 0
-	with open(File, 'r') as f:
-		for index, line in enumerate(f):
-			if not line.strip():
-				#空行
-				pass
-			else:
-		    	count += 1
-	return(count)
-
-def getMetadataFeature(File, Sep):
-	with open(File, 'r') as f:
-		line = f.readline()
-		return len(line.split(Sep))
-
-def getMetadataFormat(File):
-	filename = File.split('/')[-1]
-	if not filename.find('.') == -1:
-		#有后缀
-		return filename.split('.')[-1]
-	else:
-		#无后缀
-		return 'unknown'
-
-def getMetadataState(dstate, putindb):
-	if putindb == 1:
-		return 2
-	if  dstate == 1:
-		return 1
-	else :
-		return 0
