@@ -6,6 +6,7 @@ from backend.services import HadoopsourcesService
 from backend.services import MetadataService
 from backend.tools import filemd5hash
 from backend.tools import get_all_files_in_hadoop_dir
+from backend.tools import makeSureLocalFile
 
 #扫描hadoop集群上的文件，标记
 def scanHadoopTagMetadata():
@@ -124,14 +125,15 @@ def scanHadoopTagMetadata():
 			pass
 
 
-def makeSureLocalFile(File):
-	return os.path.exists(File)
-
 def getMetadataAmount(File):
 	count = 0
 	with open(File, 'r') as f:
 		for index, line in enumerate(f):
-		    count += 1
+			if not line.strip():
+				#空行
+				pass
+			else:
+		    	count += 1
 	return(count)
 
 def getMetadataFeature(File, Sep):
