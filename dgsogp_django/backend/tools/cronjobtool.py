@@ -34,3 +34,6 @@ def getMetadataState(dstate, putindb):
 
 def getTableName(source):
 	return source.replace('/', '.')[1:]
+
+def getCollectionName(source):
+	return source.replace('/', '.')[1:]

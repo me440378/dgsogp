@@ -15,8 +15,14 @@ from backend.tools import createTable
 from backend.tools import checkTable
 from backend.tools import countTableRow
 from backend.tools import insertTable
+#mongo
+from backend.tools import getMongoDB
+from backend.tools import checkCollection
+from backend.tools import countCollection
+from backend.tools import insertCollection
 #cronjobtool
 from backend.tools import getTableName
+from backend.tools import getCollectionName
 
 #扫描hadoop集群上的文件，入库
 def scanMetadataPutInDB():
@@ -62,7 +68,7 @@ def scanMetadataPutInDB():
 									#空行
 									pass
 								else:
-									insertTable(cursor, tablename, feature, line)
+									insertTable(cursor, tablename, feature, line.strip())
 							if mstate == 0:
 								MetadataService.finishOne(metadata_id)
 					else:
@@ -79,14 +85,49 @@ def scanMetadataPutInDB():
 								#空行
 								pass
 							else:
-								insertTable(cursor, tablename, feature, line)
+								insertTable(cursor, tablename, feature, line.strip())
 					if mstate == 0:
 						MetadataService.finishOne(metadata_id)
 			elif related == 1:
 				#非关系型
 				#建表
-				#写入库表
-				pass
+				mdatadb = getMongoDB()
+				collectionname = getCollectionName(source)
+				feature = Metadata['feature']
+				#判断表是否已存在
+				if checkCollection(mdatadb, collectionname):
+					#已存在
+					count = countCollection(mdatadb, collectionname)#表行数
+					amount = Metadata['amount']#文件行数
+					if count < amount:
+						#有新增
+						with open(local, 'r') as f:
+							for _ in range(count):
+								next(f)
+							for line in f:
+								if not line.strip():
+									#空行
+									pass
+								else:
+									insertCollection(mdatadb, collectionname, line.strip())
+							if mstate == 0:
+								MetadataService.finishOne(metadata_id)
+					else:
+						#无新增
+						if mstate == 0:
+							MetadataService.finishOne(metadata_id)
+				else:
+					#不存在
+					#写入表
+					with open(local,'r') as f:
+						for line in f:
+							if not line.strip():
+								#空行
+								pass
+							else:
+								insertCollection(mdatadb, collectionname,  line.strip())
+					if mstate == 0:
+						MetadataService.finishOne(metadata_id)
 		elif mstate == 2:
 			#已完成
 			pass

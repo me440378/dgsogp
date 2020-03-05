@@ -10,6 +10,8 @@ from .hdfstool import *
 from .localtool import *
 #数据库操作相关
 from .dbtool import *
+#mongodb操作相关
+from .mongotool import *
 #定时任务特定相关
 from .cronjobtool import *
 
