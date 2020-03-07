@@ -32,8 +32,8 @@ export default {
     data: function() {
         return {
             param: {
-                username: 'wing',
-                password: '123123',
+                username: '',
+                password: '',
             },
             rules: {
                 username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
@@ -43,17 +43,20 @@ export default {
     },
     methods: {
         submitForm() {
-            this.$refs.login.validate(valid => {
-                if (valid) {
-                    this.$message.success('登录成功');
-                    localStorage.setItem('ms_username', this.param.username);
-                    this.$router.push('/');
+            var me = this
+            this.$post('/users/login', this.param).then(res=>{
+                if(res.data.error == 0){
+                    me.$message.success('登录成功')
+                    localStorage.userid = res.data.userid
+                    this.$router.push('/')
                 } else {
-                    this.$message.error('请输入账号和密码');
-                    console.log('error submit!!');
-                    return false;
+                    me.$message.error('错误，' + res.data.detail)
+                    console.log(res.data.detail)
+                    return false
                 }
-            });
+            }).catch(function(err){
+                console.log(err)
+            })
         },
     },
 };

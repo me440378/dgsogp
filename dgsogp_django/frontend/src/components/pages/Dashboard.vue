@@ -153,7 +153,7 @@ export default {
     name: 'dashboard',
     data() {
         return {
-            name: localStorage.getItem('ms_username'),
+            name: localStorage.getItem('userid'),
             NoticeList: [
                 {
                     title: 'Hadoop服务器集群的监控功能还无法使用，前端页面显示只是示例',

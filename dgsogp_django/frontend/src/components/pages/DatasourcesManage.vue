@@ -122,7 +122,6 @@
 </template>
 
 <script>
-import { fetchData } from '../../api/index';
 export default {
     name: 'DatasourcesManage',
     data() {
@@ -148,61 +147,31 @@ export default {
                     "content": "花朵分类数据",
                     "excepted": 0
                 },
-                {
-                    "id": 2,
-                    "wgroup": "ops",
-                    "wserver": "hadoop-server-test",
-                    "type": 1,
-                    "source": "/home/wing/Code/base/python",
-                    "putindb": 1,
-                    "related": 1,
-                    "pattern": 0,
-                    "target": "/python",
-                    "state": 2,
-                    "content": "python脚本",
-                    "excepted": 0
-                },
-                {
-                    "id": 3,
-                    "wgroup": "test",
-                    "wserver": "hadoop-server-test",
-                    "type": 0,
-                    "source": "/home/wing/Code/base/python/iris.data",
-                    "putindb": 0,
-                    "related": 1,
-                    "pattern": 0,
-                    "target": "/mongo/iris.data",
-                    "state": 2,
-                    "content": "花朵分类数据",
-                    "excepted": 0
-                }
             ],
             delList: [],
             editVisible: false,
-            passwordVisible: false,
-            forcepasswordVisible: false,
             pageTotal: 4,
             form: {},
             idx: -1,
             id: -1
         };
     },
-    created() {
-        // this.getData();
+    mounted() {
+        this.getData();
     },
     methods: {
-        // 获取 easy-mock 的模拟数据
-        // getData() {
-        //     fetchData(this.query).then(res => {
-        //         console.log(res);
-        //         this.tableData = res.list;
-        //         this.pageTotal = res.pageTotal || 50;
-        //     });
-        // },
+        getData() {
+            var me = this
+            this.$get("/datasources").then(res=>{
+                me.tableData = res.data
+            }).catch(function(err){
+                console.log(err)
+            })
+        },
         // 触发搜索按钮
         handleSearch() {
-            this.$set(this.query, 'pageIndex', 1);
-            this.getData();
+            // this.$set(this.query, 'pageIndex', 1);
+            // this.getData();
         },
         // 删除操作
         handleDelete(index, row) {

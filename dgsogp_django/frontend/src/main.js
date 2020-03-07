@@ -7,16 +7,69 @@ import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
 import './assets/css/icon.css';
 import './components/common/directives';
 import 'babel-polyfill';
+import axios from 'axios'
 
 Vue.config.productionTip = false;
 Vue.use(ElementUI, {
     size: 'small'
 });
 
+/* HTTP请求 */
+var Axios = axios;
+
+Vue.prototype.baseUrl = "http://127.0.0.1:8000/api/1.0"
+// Vue.prototype.toParams = function (obj) {
+//     var param = ""
+//     for(const name in obj) {
+//         if(typeof obj[name] != 'function') {
+//             param += "&" + name + "=" + encodeURI(obj[name])
+//         }
+//     }
+//     return param.substring(1)
+// }
+
+//POST
+Vue.prototype.$post=function(api, data){
+    var url = this.baseUrl + api
+    if (data === undefined){
+        data = {}
+    }
+    return Axios.post(url,data)
+}
+
+//GET
+Vue.prototype.$get=function(api, data){
+    var url = this.baseUrl + api
+    if (data === undefined){
+        data = {}
+    }
+    return Axios.get(url, data)
+} 
+
+//PUT
+Vue.prototype.$put=function(api, data){
+    var url = this.baseUrl + api
+    if (data === undefined){
+        data = {}
+    }
+    return Axios.put(url, data)
+} 
+
+//DELETE
+Vue.prototype.$delete=function(api, data){
+    var url = this.baseUrl + api
+    if (data === undefined){
+        data = {}
+    }
+    return Axios.delete(url,data)
+} 
+
+
+
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
     document.title = `${to.meta.title} | 数据治理系统`;
-    const role = localStorage.getItem('ms_username');
+    const role = localStorage.getItem('userid');
     if (!role && to.path !== '/login') {
         next('/login');
     } else if (to.meta.permission) {

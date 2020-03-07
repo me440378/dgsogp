@@ -27,6 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #RESTful
     'rest_framework',
+    #解决跨域
+    'corsheaders',
     #定时任务
     'django_crontab',
     'backend.apps.BackendConfig',
@@ -40,6 +42,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #解决跨域
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'dgsogp_django.urls'
@@ -59,6 +63,14 @@ TEMPLATES = [
         },
     },
 ]
+
+# CORS 跨域白名单
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
+]
+# CORS 允许携带Cookie
+# CORS_ALLOW_CREDENTIALS = True
 
 # Add for vue.js
 STATICFILES_DIRS = [
