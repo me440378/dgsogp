@@ -16,13 +16,28 @@ export default new Router({
             children: [
                 {
                     path: '/dashboard',
-                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Dashboard.vue'),
+                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/pages/Dashboard.vue'),
                     meta: { title: '系统首页' }
                 },
                 {
                     path: '/users',
-                    component: () => import(/* webpackChunkName: "user" */ '../components/pages/UsersManage.vue'),
+                    component: () => import(/* webpackChunkName: "users" */ '../components/pages/UsersManage.vue'),
                     meta: { title: '用户管理' }
+                },
+                {
+                    path: '/datasources',
+                    component: () => import(/* webpackChunkName: "datasources" */ '../components/pages/DatasourcesManage.vue'),
+                    meta: { title: '数据源管理' }
+                },
+                {
+                    path: '/hadoopsources',
+                    component: () => import(/* webpackChunkName: "hadoopsources" */ '../components/pages/HadoopsourcesManage.vue'),
+                    meta: { title: 'Hadoop源管理' }
+                },
+                {
+                    path: '/metadata',
+                    component: () => import(/* webpackChunkName: "metadata" */ '../components/pages/MetadataManage.vue'),
+                    meta: { title: '元数据管理' }
                 },
                 {
                     path: '/icon',
@@ -83,7 +98,7 @@ export default new Router({
         },
         {
             path: '/login',
-            component: () => import(/* webpackChunkName: "login" */ '../components/page/Login.vue'),
+            component: () => import(/* webpackChunkName: "login" */ '../components/pages/Login.vue'),
             meta: { title: '登录' }
         },
         {

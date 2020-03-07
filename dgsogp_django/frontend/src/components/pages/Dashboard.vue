@@ -4,7 +4,10 @@
             <el-col :span="8">
                 <el-card shadow="hover" class="mgb20" style="height:252px;">
                     <div class="user-info">
-                        <img src="../../assets/img/img.jpg" class="user-avator" alt />
+                        <!-- <img src="../../assets/img/img.jpg" class="user-avator" alt /> -->
+                        <div class="grid-content">
+                            <i class="el-icon-lx-people grid-con-icon" style="color:#606266"></i>
+                        </div>
                         <div class="user-info-cont">
                             <div class="user-info-name">{{name}}</div>
                             <div>{{role}}</div>
@@ -33,10 +36,10 @@
                     <el-col :span="8">
                         <el-card shadow="hover" :body-style="{padding: '0px'}">
                             <div class="grid-content grid-con-1">
-                                <i class="el-icon-lx-global grid-con-icon"></i>
+                                <i class="el-icon-lx-location grid-con-icon"></i>
                                 <div class="grid-cont-right">
                                     <div class="grid-num">4</div>
-                                    <div>服务器数量</div>
+                                    <div>数据源</div>
                                 </div>
                             </div>
                         </el-card>
@@ -44,10 +47,10 @@
                     <el-col :span="8">
                         <el-card shadow="hover" :body-style="{padding: '0px'}">
                             <div class="grid-content grid-con-2">
-                                <i class="el-icon-lx-location grid-con-icon"></i>
+                                <i class="el-icon-lx-locationfill grid-con-icon"></i>
                                 <div class="grid-cont-right">
                                     <div class="grid-num">321</div>
-                                    <div>数据源数量</div>
+                                    <div>Hadoop源数量</div>
                                 </div>
                             </div>
                         </el-card>
@@ -64,17 +67,52 @@
                         </el-card>
                     </el-col>
                 </el-row>
-                <el-card shadow="hover" style="height:403px;">
+                <el-row :gutter="20" class="mgb20">
+                    <el-col :span="8">
+                        <el-card shadow="hover" :body-style="{padding: '0px'}">
+                            <div class="grid-content grid-con-4">
+                                <i class="el-icon-lx-global grid-con-icon"></i>
+                                <div class="grid-cont-right">
+                                    <div class="grid-num">4</div>
+                                    <div>服务器数量</div>
+                                </div>
+                            </div>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-card shadow="hover" :body-style="{padding: '0px'}">
+                            <div class="grid-content grid-con-5">
+                                <i class="el-icon-lx-peoplefill grid-con-icon"></i>
+                                <div class="grid-cont-right">
+                                    <div class="grid-num">321</div>
+                                    <div>用户数量</div>
+                                </div>
+                            </div>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-card shadow="hover" :body-style="{padding: '0px'}">
+                            <div class="grid-content grid-con-6">
+                                <i class="el-icon-lx-shopfill grid-con-icon"></i>
+                                <div class="grid-cont-right">
+                                    <div class="grid-num">5000</div>
+                                    <div>数据库数量</div>
+                                </div>
+                            </div>
+                        </el-card>
+                    </el-col>
+                </el-row>
+                <el-card shadow="hover" style="height:280px;">
                     <div slot="header" class="clearfix">
-                        <span>最近数据信息</span>
-                        <el-button style="float: right; padding: 3px 0" type="text">添加</el-button>
+                        <span>系统通知</span>
+                        <!-- <el-button style="float: right; padding: 3px 0" type="text">添加</el-button> -->
                     </div>
-                    <el-table :show-header="false" :data="todoList" style="width:100%;">
-                        <el-table-column width="40">
+                    <el-table :show-header="false" :data="NoticeList" style="width:100%;">
+                        <!-- <el-table-column width="40">
                             <template slot-scope="scope">
                                 <el-checkbox v-model="scope.row.status"></el-checkbox>
                             </template>
-                        </el-table-column>
+                        </el-table-column> -->
                         <el-table-column>
                             <template slot-scope="scope">
                                 <div
@@ -83,12 +121,12 @@
                                 >{{scope.row.title}}</div>
                             </template>
                         </el-table-column>
-                        <el-table-column width="60">
+                        <!-- <el-table-column width="60">
                             <template>
                                 <i class="el-icon-edit"></i>
                                 <i class="el-icon-delete"></i>
                             </template>
-                        </el-table-column>
+                        </el-table-column> -->
                     </el-table>
                 </el-card>
             </el-col>
@@ -116,31 +154,19 @@ export default {
     data() {
         return {
             name: localStorage.getItem('ms_username'),
-            todoList: [
+            NoticeList: [
                 {
-                    title: '今天要修复100个bug',
+                    title: 'Hadoop服务器集群的监控功能还无法使用，前端页面显示只是示例',
+                    status: false
+                },
+                {
+                    title: '上次登录时间和上次登录地点记录功能无法使用，前端页面显示只是示例',
                     status: false
                 },
                 {
                     title: '今天要修复100个bug',
                     status: false
                 },
-                {
-                    title: '今天要写100行代码加几个bug吧',
-                    status: false
-                },
-                {
-                    title: '今天要修复100个bug',
-                    status: false
-                },
-                {
-                    title: '今天要修复100个bug',
-                    status: true
-                },
-                {
-                    title: '今天要写100行代码加几个bug吧',
-                    status: true
-                }
             ],
             data: [
                 {
@@ -312,7 +338,7 @@ export default {
 }
 
 .grid-con-2 .grid-num {
-    color: rgb(45, 140, 240);
+    color: rgb(100, 213, 114);
 }
 
 .grid-con-3 .grid-con-icon {
@@ -321,6 +347,30 @@ export default {
 
 .grid-con-3 .grid-num {
     color: rgb(242, 94, 67);
+}
+
+.grid-con-4 .grid-con-icon {
+    background: rgb(153, 204, 51);
+}
+
+.grid-con-4 .grid-num {
+    color: rgb(153, 204, 51);
+}
+
+.grid-con-5 .grid-con-icon {
+    background: rgb(255, 153, 0);
+}
+
+.grid-con-5 .grid-num {
+    color: rgb(255, 153, 0);
+}
+
+.grid-con-6 .grid-con-icon {
+    background: rgb(255, 204, 0);
+}
+
+.grid-con-6 .grid-num {
+    color: rgb(255, 204, 0);
 }
 
 .user-info {

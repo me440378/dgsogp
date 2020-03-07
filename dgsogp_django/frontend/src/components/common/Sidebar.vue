@@ -67,6 +67,21 @@ export default {
                     title: '用户管理'
                 },
                 {
+                    icon: 'el-icon-lx-location',
+                    index: 'datasources',
+                    title: '数据源管理'
+                },
+                {
+                    icon: 'el-icon-lx-locationfill',
+                    index: 'hadoopsources',
+                    title: 'Hadoop源管理'
+                },
+                {
+                    icon: 'el-icon-lx-tag',
+                    index: 'metadata',
+                    title: '元数据管理'
+                },
+                {
                     icon: 'el-icon-lx-copy',
                     index: 'tabs',
                     title: 'tab选项卡'
@@ -109,21 +124,6 @@ export default {
                     icon: 'el-icon-pie-chart',
                     index: 'charts',
                     title: 'schart图表'
-                },
-                {
-                    icon: 'el-icon-lx-warn',
-                    index: '7',
-                    title: '错误处理',
-                    subs: [
-                        {
-                            index: 'permission',
-                            title: '权限测试'
-                        },
-                        {
-                            index: '404',
-                            title: '404页面'
-                        }
-                    ]
                 },
             ]
         };
