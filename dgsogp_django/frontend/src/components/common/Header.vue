@@ -35,7 +35,7 @@
                 <!-- 用户名下拉菜单 -->
                 <el-dropdown class="user-name" trigger="click" @command="handleCommand">
                     <span class="el-dropdown-link">
-                        {{username}}
+                        {{user.nickname}}
                         <i class="el-icon-caret-bottom"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
@@ -56,18 +56,24 @@ export default {
         return {
             collapse: false,
             fullscreen: false,
-            name: 'linxin',
+            user: {
+
+            },
             // message: 2
         };
     },
-    computed: {
-        username() {
-            let userid = localStorage.getItem('userid');
-            let username = 'wing'
-            return username ? username : this.name;
-        }
-    },
     methods: {
+        getData(){
+            let userid = localStorage.getItem('userid');
+            let me = this;
+            this.$post("/frontend/header",{
+                "userid": userid,
+            }).then(res=>{
+                me.user = res.data.user
+            }).catch(function(err){
+                console.log(err)
+            })
+        },
         // 用户名下拉菜单选择事件
         handleCommand(command) {
             if (command == 'loginout') {
@@ -108,11 +114,14 @@ export default {
             this.fullscreen = !this.fullscreen;
         }
     },
+    created() {
+        this.getData()
+    },
     mounted() {
         if (document.body.clientWidth < 1500) {
             this.collapseChage();
         }
-    }
+    },
 };
 </script>
 <style scoped>

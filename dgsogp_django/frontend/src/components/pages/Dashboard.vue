@@ -9,7 +9,7 @@
                             <i class="el-icon-lx-people grid-con-icon" style="color:#606266"></i>
                         </div>
                         <div class="user-info-cont">
-                            <div class="user-info-name">{{name}}</div>
+                            <div class="user-info-name">{{user.nickname}}</div>
                             <div>{{role}}</div>
                         </div>
                     </div>
@@ -38,7 +38,7 @@
                             <div class="grid-content grid-con-1">
                                 <i class="el-icon-lx-location grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">4</div>
+                                    <div class="grid-num">{{datasourcesCount}}</div>
                                     <div>数据源</div>
                                 </div>
                             </div>
@@ -49,8 +49,8 @@
                             <div class="grid-content grid-con-2">
                                 <i class="el-icon-lx-locationfill grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">321</div>
-                                    <div>Hadoop源数量</div>
+                                    <div class="grid-num">{{hadoopsourcesCount}}</div>
+                                    <div>Hadoop源</div>
                                 </div>
                             </div>
                         </el-card>
@@ -60,8 +60,8 @@
                             <div class="grid-content grid-con-3">
                                 <i class="el-icon-lx-tag grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">5000</div>
-                                    <div>元数据数量</div>
+                                    <div class="grid-num">{{metadataCount}}</div>
+                                    <div>元数据</div>
                                 </div>
                             </div>
                         </el-card>
@@ -74,7 +74,7 @@
                                 <i class="el-icon-lx-global grid-con-icon"></i>
                                 <div class="grid-cont-right">
                                     <div class="grid-num">4</div>
-                                    <div>服务器数量</div>
+                                    <div>服务器</div>
                                 </div>
                             </div>
                         </el-card>
@@ -84,8 +84,8 @@
                             <div class="grid-content grid-con-5">
                                 <i class="el-icon-lx-peoplefill grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">321</div>
-                                    <div>用户数量</div>
+                                    <div class="grid-num">{{usersCount}}</div>
+                                    <div>用户</div>
                                 </div>
                             </div>
                         </el-card>
@@ -95,8 +95,8 @@
                             <div class="grid-content grid-con-6">
                                 <i class="el-icon-lx-shopfill grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">5000</div>
-                                    <div>数据库数量</div>
+                                    <div class="grid-num">0</div>
+                                    <div>数据库</div>
                                 </div>
                             </div>
                         </el-card>
@@ -153,7 +153,12 @@ export default {
     name: 'dashboard',
     data() {
         return {
-            name: localStorage.getItem('userid'),
+            userid: localStorage.getItem('userid'),
+            user:{},
+            datasourcesCount:0,
+            hadoopsourcesCount:0,
+            metadataCount:0,
+            usersCount:0,
             NoticeList: [
                 {
                     title: 'Hadoop服务器集群的监控功能还无法使用，前端页面显示只是示例',
@@ -252,8 +257,11 @@ export default {
     },
     computed: {
         role() {
-            return this.name === 'admin' ? '超级管理员' : '普通用户';
+            return this.userid === '1' ? '超级管理员' : '普通用户';
         }
+    },
+    mounted(){
+        this.getData()
     },
     // created() {
     //     this.handleListener();
@@ -262,18 +270,33 @@ export default {
     // activated() {
     //     this.handleListener();
     // },
-    // deactivated() {
-    //     window.removeEventListener('resize', this.renderChart);
-    //     bus.$off('collapse', this.handleBus);
-    // },
+    deactivated() {
+        window.removeEventListener('resize', this.renderChart);
+        bus.$off('collapse', this.handleBus);
+    },
     methods: {
-        changeDate() {
-            const now = new Date().getTime();
-            this.data.forEach((item, index) => {
-                const date = new Date(now - (6 - index) * 86400000);
-                item.name = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
-            });
-        }
+        getData(){
+            let userid = localStorage.getItem('userid');
+            let me = this;
+            this.$post("/frontend/dashboard",{
+                "userid": "2",
+            }).then(res=>{
+                me.user = res.data.user
+                me.datasourcesCount = res.data.datasourcesCount
+                me.hadoopsourcesCount = res.data.hadoopsourcesCount
+                me.metadataCount = res.data.metadataCount
+                me.usersCount = res.data.usersCount
+            }).catch(function(err){
+                console.log(err)
+            })
+        },
+        // changeDate() {
+        //     const now = new Date().getTime();
+        //     this.data.forEach((item, index) => {
+        //         const date = new Date(now - (6 - index) * 86400000);
+        //         item.name = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+        //     });
+        // },
         // handleListener() {
         //     bus.$on('collapse', this.handleBus);
         //     // 调用renderChart方法对图表进行重新渲染

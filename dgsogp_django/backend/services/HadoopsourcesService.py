@@ -54,3 +54,12 @@ class HadoopsourcesService():
 		except Exception as e:
 			return reply(1, str(e))
 		return reply(0)
+		
+	def countAll():
+		re = None
+		try:
+			re = Hadoopsources.objects.using('admin_db').count()
+		except Exception as e:
+			return reply(1, str(e))
+		return re
+		

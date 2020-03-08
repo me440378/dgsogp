@@ -11,7 +11,7 @@
             <div class="handle-box">
                 <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
-                <el-button type="primary" icon="el-icon-lx-add" @click="">添加用户</el-button>
+                <el-button type="primary" icon="el-icon-lx-add" @click="handleRegister">添加用户</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -19,39 +19,38 @@
                 class="table"
                 ref="multipleTable"
                 header-cell-class-name="table-header"
-                @selection-change="handleSelectionChange"
             >
                 <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
-                <el-table-column prop="name" label="用户名"></el-table-column>
+                <el-table-column prop="username" label="用户名"></el-table-column>
                 <el-table-column prop="nickname" label="用户昵称"></el-table-column>
                 <el-table-column label="密码操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button
                                 type="text"
                                 icon="el-icon-edit"
-                                @click="handlePassword(scope.$index, scope.row)"
+                                @click="handlePassword(scope.row)"
                             >修改</el-button>
                         <el-button
                                 type="text"
                                 icon="el-icon-edit"
                                 class="red"
-                                @click="handleForcePassword(scope.$index, scope.row)"
+                                @click="handleForcePassword(scope.row)"
                             >强制修改</el-button>
                     </template>
                 </el-table-column>
-                <el-table-column prop="date" label="注册时间"></el-table-column>
+                <el-table-column prop="created_at" label="注册时间"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-edit"
-                            @click="handleEdit(scope.$index, scope.row)"
+                            @click="handleEdit(scope.row)"
                         >编辑</el-button>
                         <el-button
                             type="text"
                             icon="el-icon-delete"
                             class="red"
-                            @click="handleDelete(scope.$index, scope.row)"
+                            @click="handleDelete(scope.row)"
                         >删除</el-button>
                     </template>
                 </el-table-column>
@@ -70,43 +69,62 @@
 
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
-            <el-form ref="form" :model="form" label-width="70px">
+            <el-form ref="form" :model="form.data" label-width="70px">
                 <el-form-item label="用户昵称">
-                    <el-input v-model="form.nickname"></el-input>
+                    <el-input v-model="form.data.nickname"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveEdit">确 定</el-button>
+                <el-button type="primary" @click="saveEdit(form.data.id)">确 定</el-button>
             </span>
         </el-dialog>
 
         <!-- 修改密码弹出框 -->
         <el-dialog title="修改密码" :visible.sync="passwordVisible" width="30%">
-            <el-form ref="form" :model="form" label-width="70px">
+            <el-form ref="form" :model="form.data" label-width="70px">
                 <el-form-item label="旧密码">
-                    <el-input v-model="form.oldpassword"></el-input>
+                    <el-input v-model="form.data.oldpassword"></el-input>
                 </el-form-item>
                 <el-form-item label="新密码">
-                    <el-input v-model="form.newpassword"></el-input>
+                    <el-input v-model="form.data.newpassword"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="passwordVisible = false">取 消</el-button>
-                <el-button type="primary" @click="savePassword">确 定</el-button>
+                <el-button type="primary" @click="savePassword(form.data.id)">确 定</el-button>
             </span>
         </el-dialog>
 
         <!-- 强制修改密码弹出框 -->
         <el-dialog title="强制修改密码" :visible.sync="forcepasswordVisible" width="30%">
-            <el-form ref="form" :model="form" label-width="70px">
+            <el-form ref="form" :model="form.data" label-width="70px">
                 <el-form-item label="新密码">
-                    <el-input v-model="form.password"></el-input>
+                    <el-input v-model="form.data.newpassword"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="forcepasswordVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveForcePassword">确 定</el-button>
+                <el-button type="primary" @click="saveForcePassword(form.data.id)">确 定</el-button>
+            </span>
+        </el-dialog>
+
+        <!-- 添加用户弹出框 -->
+        <el-dialog title="添加用户" :visible.sync="registerVisible" width="30%">
+            <el-form ref="form" :model="form.data" label-width="70px">
+                <el-form-item label="用户名">
+                    <el-input v-model="form.data.username"></el-input>
+                </el-form-item>
+                <el-form-item label="用户昵称">
+                    <el-input v-model="form.data.nickname"></el-input>
+                </el-form-item>
+                <el-form-item label="用户密码">
+                    <el-input v-model="form.data.password"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="registerVisible = false">取 消</el-button>
+                <el-button type="primary" @click="saveRegister">确 定</el-button>
             </span>
         </el-dialog>
 
@@ -126,75 +144,186 @@ export default {
                 pageSize: 10
             },
             tableData: [],
-            delList: [],
             editVisible: false,
             passwordVisible: false,
             forcepasswordVisible: false,
+            registerVisible: false,
             pageTotal: 0,
-            form: {},
+            form: {
+                data:{
+                    id:'',
+                    username:'',
+                    nickname:'',
+                    password:'',
+                    oldpassword:'',
+                    newpassword:'',
+                },
+            },
             idx: -1,
             id: -1
         };
     },
-    created() {
+    mounted() {
         this.getData();
     },
     methods: {
-        // 获取 easy-mock 的模拟数据
         getData() {
-            fetchData(this.query).then(res => {
-                console.log(res);
-                this.tableData = res.list;
-                this.pageTotal = res.pageTotal || 50;
-            });
+            var me = this
+            this.$get("/users").then(res=>{
+                me.tableData = res.data
+            }).catch(function(err){
+                console.log(err)
+            })
         },
         // 触发搜索按钮
         handleSearch() {
-            this.$set(this.query, 'pageIndex', 1);
             this.getData();
         },
         // 删除操作
-        handleDelete(index, row) {
+        handleDelete(row) {
             // 二次确认删除
+            let id = row.id
             this.$confirm('确定要删除吗？', '提示', {
                 type: 'warning'
-            })
-                .then(() => {
-                    this.$message.success('删除成功');
-                    this.tableData.splice(index, 1);
+            }).then(() => {
+                let me = this
+                this.$delete(`/users/${id}`).then(res=>{
+                    if(res.data.error == 0){
+                        me.$message.success('删除成功');
+                        me.getData()
+                    } else {
+                        me.$message.error('删除失败，' + res.data.detail)
+                        console.log(res.data.detail)
+                        return
+                    }
+                }).catch(function(err){
+                    console.log(err)
                 })
-                .catch(() => {});
+            }).catch(function(err){
+                console.log(err)
+            })
         },
         // 编辑操作
-        handleEdit(index, row) {
-            this.idx = index;
-            this.form = row;
+        handleEdit(row) {
+            this.form.data.id = row.id;
+            this.form.data.nickname = row.nickname;
             this.editVisible = true;
         },
         // 保存编辑
-        saveEdit() {
+        saveEdit(id) {
+            let key = {}
+            if(this.form.data.nickname){
+                key.nickname=this.form.data.nickname
+            } else {
+                this.$message.error('请完整填写信息')
+                return
+            }
             this.editVisible = false;
-            this.$message.success(`修改 ${this.form.name} 信息成功`);
-            this.$set(this.tableData, this.idx, this.form);
+            let me = this
+            this.$put(`/users/${id}`, key).then(res=>{
+                if(res.data.error == 0){
+                    me.$message.success('修改成功')
+                    me.getData();
+                } else {
+                    me.$message.error('修改失败，' + res.data.detail)
+                    console.log(res.data.detail)
+                    return
+                }
+            }).catch(function(err){
+                console.log(err)
+            })
         },
         //修改密码
-        handlePassword(index, row) {
-            this.idx = index;
-            this.form = row;
+        handlePassword(row) {
+            this.form.data.id = row.id;
             this.passwordVisible = true;
         },
         //保存密码
-        savePassword() {
+        savePassword(id) {
+            let key = {}
+            if(this.form.data.oldpassword&&this.form.data.newpassword){
+                key.oldpassword=this.form.data.oldpassword
+                key.newpassword=this.form.data.newpassword
+            } else {
+                this.$message.error('请完整填写信息')
+                return
+            }
             this.passwordVisible = false;
+            this.form.data.oldpassword=''
+            this.form.data.newpassword=''
+            let me = this
+            this.$put(`/users/password/${id}`, key).then(res=>{
+                if(res.data.error == 0){
+                    me.$message.success('修改成功')
+                } else {
+                    me.$message.error('修改失败，' + res.data.detail)
+                    console.log(res.data.detail)
+                    return
+                }
+            }).catch(function(err){
+                console.log(err)
+            })
         },
         //强制修改密码
-        handleForcePassword(index, row) {
-            this.idx = index;
-            this.form = row;
+        handleForcePassword(row) {
+            this.form.data.id = row.id;
             this.forcepasswordVisible = true;
         },
-        saveForcePassword() {
+        saveForcePassword(id) {
+            let key = {}
+            if(this.form.data.newpassword){
+                key.newpassword=this.form.data.newpassword
+            } else {
+                this.$message.error('请完整填写信息')
+                return
+            }
             this.forcepasswordVisible = false;
+            this.form.data.newpassword=''
+            let me = this
+            this.$put(`/users/forcepassword/${id}`, key).then(res=>{
+                if(res.data.error == 0){
+                    me.$message.success('修改成功')
+                } else {
+                    me.$message.error('修改失败，' + res.data.detail)
+                    console.log(res.data.detail)
+                    return
+                }
+            }).catch(function(err){
+                console.log(err)
+            })
+        },
+        //添加用户
+        handleRegister() {
+            this.registerVisible = true;
+        },
+        //保存添加用户
+        saveRegister() {
+            let key = {}
+            if(this.form.data.username&&this.form.data.nickname&&this.form.data.password){
+                key.username=this.form.data.username
+                key.nickname=this.form.data.nickname
+                key.password=this.form.data.password
+            } else {
+                this.$message.error('请完整填写信息')
+                return
+            }
+            this.registerVisible = false
+            this.form.data.username=''
+            this.form.data.nickname=''
+            this.form.data.password=''
+            let me = this
+            this.$post("/users", key).then(res=>{
+                if(res.data.error == 0){
+                    me.$message.success('添加成功')
+                    me.getData();
+                } else {
+                    me.$message.error('添加失败，' + res.data.detail)
+                    console.log(res.data.detail)
+                    return
+                }
+            }).catch(function(err){
+                console.log(err)
+            })
         },
         // 分页导航
         handlePageChange(val) {

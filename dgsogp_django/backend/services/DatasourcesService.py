@@ -1,6 +1,7 @@
 from backend.models import Datasources
 from backend.serializers import DatasourcesSerializer
 from backend.tools import reply
+from backend.tools import countReply
 
 class DatasourcesService():
 	
@@ -62,3 +63,12 @@ class DatasourcesService():
 		except Exception as e:
 			return reply(1, str(e))
 		return reply(0)
+
+	def countAll():
+		re = None
+		try:
+			re = Datasources.objects.using('admin_db').count()
+		except Exception as e:
+			return reply(1, str(e))
+		return re
+		

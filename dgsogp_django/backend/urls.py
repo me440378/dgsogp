@@ -12,6 +12,10 @@ from backend.views import HadoopsourcesView
 from backend.views import HadoopsourcesDetailView
 from backend.views import MetadataView
 from backend.views import MetadataDetailView
+#前端视图
+from backend.views import FrontendView
+from backend.views import HeaderView
+from backend.views import DashboardView
 
 urlpatterns = [
 	##index,在views/__init__.py
@@ -31,4 +35,8 @@ urlpatterns = [
     ##MetadataView
     path(r'metadata', MetadataView.as_view()),
     re_path(r'metadata/(?P<id>\d+)', MetadataDetailView.as_view()),
+
+    ##Frontend 前端视图
+    path(r'frontend/header', HeaderView.as_view()),
+    path(r'frontend/dashboard', DashboardView.as_view()),
 ]

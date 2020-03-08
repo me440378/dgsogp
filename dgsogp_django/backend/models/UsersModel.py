@@ -6,7 +6,8 @@ class Users(models.Model):
     password = models.CharField(max_length=255)
     nickname = models.CharField(max_length=255)
     email = models.CharField(max_length=255, blank=True, null=True)
-    create_time = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         managed = False
