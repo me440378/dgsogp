@@ -5,8 +5,13 @@ from backend.tools import countReply
 
 class DatasourcesService():
 	
-	def createOne(wgroup, wserver, type, source, related, state, excepted, putindb = None, pattern = None, target = None, content = None):
+	def createOne(wgroup, wserver, type, source, related, putindb = None, pattern = None, target = None, content = None):
 		try:
+			state = 0
+			if pattern == "1":
+				state = 1
+			if type == "2":
+				state = 2
 			datasource = Datasources.objects.using('admin_db').create(
 				wgroup = wgroup,
 				wserver = wserver,
@@ -18,7 +23,7 @@ class DatasourcesService():
 				target = target,
 				state = state,
 				content = content,
-				excepted = excepted,
+				excepted = 0,
 			)
 		except Exception as e:
 			return reply(1, str(e))
