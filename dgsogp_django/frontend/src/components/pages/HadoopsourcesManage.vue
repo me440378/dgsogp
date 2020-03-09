@@ -9,7 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.name" placeholder="" class="handle-input mr10"></el-input>
+                <el-input v-model="query.key" placeholder="" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
             </div>
             <el-table
@@ -18,7 +18,6 @@
                 class="table"
                 ref="multipleTable"
                 header-cell-class-name="table-header"
-                @selection-change="handleSelectionChange"
             >
                 <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
                 <el-table-column prop="source" label="HDFS路径"></el-table-column>
@@ -32,14 +31,14 @@
                         }}
                     </template>
                 </el-table-column>
-                <el-table-column prop="excepted" label="异常状态">
+<!--                 <el-table-column prop="excepted" label="异常状态">
                     <template slot-scope="scope">
                         {{
                             scope.row.excepted == '0' ? "正常" :
                             scope.row.excepted == '1' ? "异常" : ""
                         }}
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -56,87 +55,36 @@
 </template>
 
 <script>
-import { fetchData } from '../../api/index';
 export default {
     name: 'HadoopsourcesManage',
     data() {
         return {
             query: {
-                name: '',
-                nickname: '',
+                key: '',
                 pageIndex: 1,
                 pageSize: 10
             },
-            tableData: [
-                {
-                    "id": 1,
-                    "source": "/dev/hadoop-server-test/iris.data",
-                    "state": 2,
-                    "datasource_id": 1
-                },
-                {
-                    "id": 2,
-                    "source": "/ops/hadoop-server-test/python",
-                    "state": 2,
-                    "datasource_id": 2
-                },
-                {
-                    "id": 3,
-                    "source": "/test/hadoop-server-test/mongo/iris.data",
-                    "state": 2,
-                    "datasource_id": 3
-                }
-            ],
-            delList: [],
-            editVisible: false,
-            passwordVisible: false,
-            forcepasswordVisible: false,
+            tableData: [],
             pageTotal: 4,
-            form: {},
             idx: -1,
             id: -1
         };
     },
-    created() {
-        // this.getData();
+    mounted() {
+        this.getData();
     },
     methods: {
-        // 获取 easy-mock 的模拟数据
-        // getData() {
-        //     fetchData(this.query).then(res => {
-        //         console.log(res);
-        //         this.tableData = res.list;
-        //         this.pageTotal = res.pageTotal || 50;
-        //     });
-        // },
+        getData() {
+            var me = this
+            this.$get("/hadoopsources").then(res=>{
+                me.tableData = res.data
+            }).catch(function(err){
+                console.log(err)
+            })
+        },
         // 触发搜索按钮
         handleSearch() {
-            this.$set(this.query, 'pageIndex', 1);
             this.getData();
-        },
-        // 删除操作
-        handleDelete(index, row) {
-            // 二次确认删除
-            this.$confirm('确定要删除吗？', '提示', {
-                type: 'warning'
-            })
-                .then(() => {
-                    this.$message.success('删除成功');
-                    this.tableData.splice(index, 1);
-                })
-                .catch(() => {});
-        },
-        // 编辑操作
-        handleEdit(index, row) {
-            this.idx = index;
-            this.form = row;
-            this.editVisible = true;
-        },
-        // 保存编辑
-        saveEdit() {
-            this.editVisible = false;
-            this.$message.success(`修改 ${this.form.name} 信息成功`);
-            this.$set(this.tableData, this.idx, this.form);
         },
         // 分页导航
         handlePageChange(val) {

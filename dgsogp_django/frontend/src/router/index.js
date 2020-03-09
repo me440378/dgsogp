@@ -40,19 +40,14 @@ export default new Router({
                     meta: { title: '元数据管理' }
                 },
                 {
+                    path: '/messages',
+                    component: () => import(/* webpackChunkName: "messages" */ '../components/pages/MessagesManage.vue'),
+                    meta: { title: '通知管理' }
+                },
+                {
                     path: '/icon',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/Icon.vue'),
                     meta: { title: '自定义图标' }
-                },
-                {
-                    path: '/tabs',
-                    component: () => import(/* webpackChunkName: "tabs" */ '../components/page/Tabs.vue'),
-                    meta: { title: 'tab选项卡' }
-                },
-                {
-                    path: '/form',
-                    component: () => import(/* webpackChunkName: "form" */ '../components/page/BaseForm.vue'),
-                    meta: { title: '基本表单' }
                 },
                 {
                     // 富文本编辑器组件

@@ -25,14 +25,9 @@ class HeaderView(APIView):
 		json_dict = json.loads(json_str)
 		result = FrontendService.getHeaderData(**json_dict)
 		return Response(result)
-		
-	# def post(self, request):
-	# 	json_bytes = request.body
-	# 	json_str = json_bytes.decode()
-	# 	json_dict = json.loads(json_str)
-	# 	result = DatasourcesService.createOne(**json_dict)
-	# 	return Response(result)
 
-	# def get(self, request, id):
-	# 	result = DatasourcesService.readOne(id)
-	# 	return Response(result)
+class DatasourceStateView(APIView):
+
+	def post(self, request, id):
+		result = FrontendService.finishDatasourceState(id)
+		return Response(result)

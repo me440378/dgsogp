@@ -178,7 +178,7 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveEdit">确 定</el-button>
+                <el-button type="primary" @click="saveEdit(form.data.id)">确 定</el-button>
             </span>
         </el-dialog>
 
@@ -278,7 +278,7 @@ export default {
                     state:'',
                     content:'',
                     excepted:'',
-                    finish: false,
+                    finish: 'false',
                 }
             },
             idx: -1,
@@ -338,13 +338,44 @@ export default {
             this.form.data.state = row.state
             this.form.data.content = row.content
             this.form.data.excepted = row.excepted
-            this.form.data.finish = false
+            this.form.data.finish = 'false'
             this.editVisible = true;
         },
         // 保存编辑
-        saveEdit() {
+        saveEdit(id) {
+            let key = {}
+            key.content=this.form.data.content
             this.editVisible = false;
-            this.$message.success('修改信息成功');
+            if(this.form.data.finish){
+                let me = this
+                this.$post(`/frontend/dstate/${id}`).then(res=>{
+                    if(res.data.error == 0){
+                        me.$message.success('修改状态成功')
+                        me.getData();
+                    } else {
+                        me.$message.error('修改状态失败，' + res.data.detail)
+                        console.log(res.data.detail)
+                        return
+                    }
+                }).catch(function(err){
+                    console.log(err)
+                })
+            }
+
+            let me = this
+                this.$put(`/datasources/${id}`, key).then(res=>{
+                    if(res.data.error == 0){
+                        me.$message.success('修改成功')
+                        me.getData();
+                    } else {
+                        me.$message.error('修改失败，' + res.data.detail)
+                        console.log(res.data.detail)
+                        return
+                    }
+                }).catch(function(err){
+                    console.log(err)
+                })
+            
         },
         //添加数据源
         handleCreate() {

@@ -82,9 +82,9 @@ export default {
                     title: '元数据管理'
                 },
                 {
-                    icon: 'el-icon-lx-copy',
-                    index: 'tabs',
-                    title: 'tab选项卡'
+                    icon: 'el-icon-lx-message',
+                    index: 'messages',
+                    title: '通知管理'
                 },
                 {
                     icon: 'el-icon-lx-calendar',
@@ -92,11 +92,7 @@ export default {
                     title: '表单相关',
                     subs: [
                         {
-                            index: 'form',
-                            title: '基本表单'
-                        },
-                        {
-                            index: '3-2',
+                            index: '3-1',
                             title: '三级菜单',
                             subs: [
                                 {

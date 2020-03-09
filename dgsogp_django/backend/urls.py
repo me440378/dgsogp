@@ -16,6 +16,7 @@ from backend.views import MetadataDetailView
 from backend.views import FrontendView
 from backend.views import HeaderView
 from backend.views import DashboardView
+from backend.views import DatasourceStateView
 
 urlpatterns = [
 	##index,在views/__init__.py
@@ -39,4 +40,5 @@ urlpatterns = [
     ##Frontend 前端视图
     path(r'frontend/header', HeaderView.as_view()),
     path(r'frontend/dashboard', DashboardView.as_view()),
+    re_path(r'frontend/dstate/(?P<id>\d+)', DatasourceStateView.as_view()),
 ]

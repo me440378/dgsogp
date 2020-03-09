@@ -47,6 +47,14 @@ class HadoopsourcesService():
 			return reply(1, str(e))
 		return reply(0)
 
+	def prefinishOne(id):
+		kvdict = {"state":0}
+		try:
+			Hadoopsources.objects.using('admin_db').filter(pk = id).update(**kvdict)
+		except Exception as e:
+			return reply(1, str(e))
+		return reply(0)
+
 	def finishOne(id):
 		kvdict = {"state":2}
 		try:
