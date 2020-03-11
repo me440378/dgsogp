@@ -56,3 +56,5 @@ class DatainterfacesService():
 			return reply(1, str(e))
 		return re
 		
+	def readData(id):
+		pass

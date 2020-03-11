@@ -33,3 +33,9 @@ class DatainterfacesDetailView(APIView):
 	def delete(self, request, id):
 		result = DatainterfacesService.deleteOne(id)
 		return Response(result)
+
+class DatainterfacesDataView(APIView):
+	
+	def get(self, request, id):
+		result = DatainterfacesService.readData(id)
+		return Response(result)

@@ -1,3 +1,8 @@
+import os
+import django
+import time
+import logging
+
 #从远端采集到本地再上传HDFS，创建Hadoopsources
 from .collectDataFromServers import *
 #将HDFS上的文件下载到本地，创建Metadata
@@ -7,10 +12,6 @@ from .scanMetadataPutInDB import *
 #清空本地暂存目录
 from .freeLocalBaseDir import *
 
-import time
-import logging
-import os
-import django
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dgsogp_django.settings')
 django.setup()
