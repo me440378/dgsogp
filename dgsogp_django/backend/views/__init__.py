@@ -4,6 +4,8 @@ from .UsersView import *
 from .DatasourcesView import *
 from .HadoopsourcesView import *
 from .MetadataView import *
+from .DatainterfacesView import *
+from .DatabaseinterfacesView import *
 #前端视图
 from .FrontendView import *
 

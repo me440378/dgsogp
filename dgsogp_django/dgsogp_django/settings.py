@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'dgsogp_django.wsgi.application'
 
 # Crontab
 CRONJOBS = [
-    ('*/2 * * * *', 'backend.cronjobs.testjob'),
+    ('*/1 * * * *', 'backend.cronjobs.testjob'),
     # ('0 0 * * *', 'backend.cronjobs.collectDataFromServers'),
     # ('0 0 * * *', 'backend.cronjobs.scanHadoopPutInDB'),
     # ('0 0 * * *', 'backend.cronjobs.scanHadoopTagMetadata'),
@@ -139,6 +139,80 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Logging
+LOG_DIR = '/tmp/django_logs'
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue'
+        }
+    },
+    'formatters': {
+        'main_formatter': {
+            'format': '%(levelname)s:%(name)s: %(message)s '
+                     '(%(asctime)s; %(filename)s:%(lineno)d)',
+            'datefmt': "%Y-%m-%d %H:%M:%S",
+        },
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'console':{
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'main_formatter',
+        },
+        'production_file':{
+            'level' : 'INFO',
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'filename' : os.path.join(LOG_DIR, 'main.log'),
+            'maxBytes': 1024*1024*5, # 5 MB
+            'backupCount' : 7,
+            'formatter': 'main_formatter',
+            'filters': ['require_debug_false'],
+        },
+        'debug_file':{
+            'level' : 'DEBUG',
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'filename' : os.path.join(LOG_DIR, 'main_debug.log'),
+            'maxBytes': 1024*1024*5, # 5 MB
+            'backupCount' : 7,
+            'formatter': 'main_formatter',
+            'filters': ['require_debug_true'],
+        },
+        'django_crontab': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'django_crontab.log'),
+            'formatter': 'main_formatter',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins', 'console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django_crontab.crontab': {
+            'handlers': ['django_crontab'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        '': {
+            'handlers': ['console', 'production_file', 'debug_file'],
+            'level': "DEBUG",
+        },
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

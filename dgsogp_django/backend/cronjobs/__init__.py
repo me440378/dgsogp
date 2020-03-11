@@ -7,7 +7,15 @@ from .scanMetadataPutInDB import *
 #清空本地暂存目录
 from .freeLocalBaseDir import *
 
+import time
+import logging
+import os
+import django
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dgsogp_django.settings')
+django.setup()
+
 def testjob():
-	import time
-	print('crontab-test 2min print1,{}'.format(time.time()))
+	logger = logging.getLogger('django_crontab.crontab')
+	logger.info('crontab-test at {}'.format(time.ctime()))
 

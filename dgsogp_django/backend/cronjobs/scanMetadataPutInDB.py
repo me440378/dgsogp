@@ -1,6 +1,7 @@
 from backend.services import DatasourcesService
 from backend.services import HadoopsourcesService
 from backend.services import MetadataService
+from backend.services import DatainterfacesService
 
 #hdfs
 from backend.tools import getHadoopClient
@@ -79,13 +80,19 @@ def scanMetadataPutInDB():
 					#不存在
 					createTable(cursor, tablename, feature)
 					#写入表
-					with open(local,'r') as f:
+					with open(local, 'r') as f:
 						for line in f:
 							if not line.strip():
 								#空行
 								pass
 							else:
 								insertTable(cursor, tablename, feature, line.strip())
+					datainterface = {
+						'type':0,#关系型，一定是mysql
+						'name':tablename,
+						'metadata_id':metadata_id,
+					}
+					DatainterfacesService.createOne(**datainterface)
 					if mstate == 0:
 						MetadataService.finishOne(metadata_id)
 			elif related == 1:
@@ -126,6 +133,12 @@ def scanMetadataPutInDB():
 								pass
 							else:
 								insertCollection(mdatadb, collectionname,  line.strip())
+					datainterface = {
+						'type':1,#非关系型，一定是mongodb
+						'name':collectionname,
+						'metadata_id':metadata_id,
+					}
+					DatainterfacesService.createOne(**datainterface)
 					if mstate == 0:
 						MetadataService.finishOne(metadata_id)
 		elif mstate == 2:

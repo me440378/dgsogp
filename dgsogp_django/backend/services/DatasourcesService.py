@@ -10,8 +10,6 @@ class DatasourcesService():
 			state = 0
 			if pattern == "1":
 				state = 1
-			if type == "2":
-				state = 2
 			datasource = Datasources.objects.using('admin_db').create(
 				wgroup = wgroup,
 				wserver = wserver,

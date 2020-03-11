@@ -27,3 +27,4 @@
 */*.sw*
 
 dgsogp_django/tmp/
+dgsogp_django/logs/

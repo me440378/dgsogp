@@ -1,5 +1,6 @@
 from backend.services import DatasourcesService
 from backend.services import HadoopsourcesService
+from backend.services import DatabaseinterfacesService
 
 #sftp
 from backend.tools import getSftpClient
@@ -32,7 +33,7 @@ def collectDataFromServers():
 			#获取Hadoop客户端
 			HadoopClient = getHadoopClient()
 			# 判断是否为文件、目录
-			type = Datasources['type']#0 文件、1 目录、3 数据库
+			type = Datasources['type']#0 文件、1 目录、2 数据库
 			if type == 0:
 				# 文件
 				# 将文件写入本地
@@ -84,8 +85,18 @@ def collectDataFromServers():
 				if state == 0:
 					DatasourcesService.finishOne(datasource_id)
 			elif type == 2:
-				# 数据库，先不用管
-				pass
+				# 数据库，生成 Databaseinterface
+				# source格式： type:wport/name
+				# wserver、datasource_id 从 Datasource 获取
+				databaseinterface = {
+					'type':0 if source[: source.index(':')]=='mysql' else 1,
+					'wserver':wserver,
+					'wport':source[source.index(':')+1 : source.index('/')],
+					'name':source[source.index('/')+1 :],
+					'datasource_id':datasource_id,
+				}
+				DatabaseinterfacesService.createOne(**databaseinterface)
+				DatasourcesService.finishOne(datasource_id)
 		elif state == 2:
 			# 已完成，不用管
 			pass
