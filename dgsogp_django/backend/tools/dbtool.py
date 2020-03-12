@@ -30,3 +30,18 @@ def insertTable(cursor, tablename, feature, line):
 	insertSQL+=','.join(["""\"{col}\"""".format(col=i) for i in line.split(',')])
 	insertSQL+=""")"""
 	cursor.execute(insertSQL)
+
+def readTable(cursor, tablename):
+	selectSQL="""SELECT * FROM `{tablename}`""".format(tablename=tablename)
+	cursor.execute(selectSQL)
+	keys = []
+	for column in cursor.description:
+		keys.append(column[0])
+	key_number = len(keys)
+	json_data = []
+	for row in cursor.fetchall():
+		item = dict()
+		for q in range(key_number):
+			item[keys[q]] = row[q]
+		json_data.append(item)
+	return json_data

@@ -72,6 +72,7 @@ def scanMetadataPutInDB():
 									insertTable(cursor, tablename, feature, line.strip())
 							if mstate == 0:
 								MetadataService.finishOne(metadata_id)
+						cursor.close()
 					else:
 						#无新增
 						if mstate == 0:
@@ -87,6 +88,7 @@ def scanMetadataPutInDB():
 								pass
 							else:
 								insertTable(cursor, tablename, feature, line.strip())
+					cursor.close()
 					datainterface = {
 						'type':0,#关系型，一定是mysql
 						'name':tablename,

@@ -146,7 +146,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Logging
-LOG_DIR = '/tmp/django_logs'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -180,7 +179,7 @@ LOGGING = {
         'production_file':{
             'level' : 'INFO',
             'class' : 'logging.handlers.RotatingFileHandler',
-            'filename' : os.path.join(LOG_DIR, 'main.log'),
+            'filename' : os.path.join(BASE_DIR, 'logs/main.log'),
             'maxBytes': 1024*1024*5, # 5 MB
             'backupCount' : 7,
             'formatter': 'main_formatter',
@@ -189,7 +188,7 @@ LOGGING = {
         'debug_file':{
             'level' : 'DEBUG',
             'class' : 'logging.handlers.RotatingFileHandler',
-            'filename' : os.path.join(LOG_DIR, 'main_debug.log'),
+            'filename' : os.path.join(BASE_DIR, 'logs/main_debug.log'),
             'maxBytes': 1024*1024*5, # 5 MB
             'backupCount' : 7,
             'formatter': 'main_formatter',
@@ -198,7 +197,7 @@ LOGGING = {
         'django_crontab': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOG_DIR, 'django_crontab.log'),
+            'filename': os.path.join(BASE_DIR, 'logs/django_crontab.log'),
             'formatter': 'main_formatter',
         },
     },

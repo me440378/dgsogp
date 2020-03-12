@@ -27,3 +27,10 @@ def insertCollection(db, collectionname, line):
 		"data": line,
 	}
 	collection.insert_one(document)
+
+def readCollection(db, collectionname):
+	collection = db.get_collection(collectionname)
+	json_data = []
+	for document in collection.find():
+		json_data.append(document)
+	return json_data
