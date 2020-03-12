@@ -82,6 +82,16 @@ export default {
                     title: '元数据管理'
                 },
                 {
+                    icon: 'el-icon-lx-shop',
+                    index: 'datainterfaces',
+                    title: '数据接口管理'
+                },
+                {
+                    icon: 'el-icon-lx-shopfill',
+                    index: 'databaseinterfaces',
+                    title: '数据库接口管理'
+                },
+                {
                     icon: 'el-icon-lx-message',
                     index: 'messages',
                     title: '通知管理'

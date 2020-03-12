@@ -40,6 +40,16 @@ export default new Router({
                     meta: { title: '元数据管理' }
                 },
                 {
+                    path: '/datainterfaces',
+                    component: () => import(/* webpackChunkName: "datainterfaces" */ '../components/pages/DatainterfacesManage.vue'),
+                    meta: { title: '数据接口管理' }
+                },
+                {
+                    path: '/databaseinterfaces',
+                    component: () => import(/* webpackChunkName: "databaseinterfaces" */ '../components/pages/DatabaseinterfacesManage.vue'),
+                    meta: { title: '数据库接口管理' }
+                },
+                {
                     path: '/messages',
                     component: () => import(/* webpackChunkName: "messages" */ '../components/pages/MessagesManage.vue'),
                     meta: { title: '通知管理' }

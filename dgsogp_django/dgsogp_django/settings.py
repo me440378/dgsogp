@@ -66,8 +66,8 @@ TEMPLATES = [
 
 # CORS 跨域白名单
 CORS_ORIGIN_WHITELIST = [
-    "http://localhost:8080",
-    "http://127.0.0.1:8080",
+    "http://localhost:8015",
+    "http://127.0.0.1:8015",
 ]
 # CORS 允许携带Cookie
 # CORS_ALLOW_CREDENTIALS = True
