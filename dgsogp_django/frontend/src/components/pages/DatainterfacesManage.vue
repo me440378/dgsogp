@@ -20,13 +20,21 @@
                 header-cell-class-name="table-header"
             >
                 <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
-                <el-table-column prop="source" label="HDFS文件路径"></el-table-column>
-                <el-table-column prop="amount" label="数据量"></el-table-column>
-                <el-table-column prop="feature" label="数据特征数"></el-table-column>
-                <el-table-column prop="hashsum" label="文件校验和"></el-table-column>
-                <el-table-column prop="format" label="文件格式"></el-table-column>
-                <el-table-column prop="hadoopsource_id" label="Hadoop源ID"></el-table-column>
-                <el-table-column prop="state" label="入库状态">
+                <el-table-column prop="type" label="数据库类型">
+                    <template slot-scope="scope">
+                        {{
+                            scope.row.type == '0' ? "mysql" :
+                            scope.row.type == '1' ? "mongodb" : ""
+                        }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="name" label="表名/集合名">                </el-table-column>
+                 <el-table-column label="数据接口http地址(GET方法)">
+                    <template slot-scope="scope">
+                        http://127.0.0.1:8000/api/1.0/datainterfaces/data/{{scope.row.id}}
+                    </template>
+                </el-table-column>
+<!--                 <el-table-column prop="state" label="入库状态">
                     <template slot-scope="scope">
                         {{
                             scope.row.state == '0' ? "未标记" :
@@ -34,7 +42,7 @@
                             scope.row.state == '2' ? "已完成或无需入库" : ""
                         }}
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -63,14 +71,16 @@ export default {
             tableData: [
                 {
                     "id": 1,
-                    "source": "/dev/hadoop-server-test/iris.data",
-                    "amount": 150,
-                    "feature": 5,
-                    "hashsum": "7a1c6dc40b600415d7113cf9e0b1aab5",
-                    "hadoopsource_id": 1,
-                    "format": "data",
-                    "state": 2
+                    "type": 0,
+                    "name": "dev.hadoop-server-test.data.iris.data",
+                    "metadata_id": 1
                 },
+                {
+                    "id": 2,
+                    "type": 1,
+                    "name": "ops.hadoop-server-test.data.iris.data",
+                    "metadata_id": 2
+                }
             ],
             pageTotal: 10,
             idx: -1,
@@ -83,7 +93,7 @@ export default {
     methods: {
         getData() {
             var me = this
-            this.$get("/metadata").then(res=>{
+            this.$get("/datainterfaces").then(res=>{
                 me.tableData = res.data
             }).catch(function(err){
                 console.log(err)

@@ -40,8 +40,14 @@ def collectDataFromServers():
 				remote = source
 				local = localGaS + target
 				makeLocalPath(local[:local.rindex('/')])
-				SftpClint.get(remote, local)#下载
-				SftpClint.close()
+				try:
+					SftpClint.get(remote, local)#下载
+					SftpClint.close()
+				except Exception as e:
+					SftpClint.close()
+					print(str(e))
+					DatasourcesService.exceptOne(datasource_id)
+					continue
 				# 从本地上传到hadoop
 				hpath = hadoopGaS + target#/dev/server/iris.data
 				makeHdfsPath(HadoopClient, hpath[:hpath.rindex('/')])#/dev/server
@@ -62,7 +68,14 @@ def collectDataFromServers():
 				localRootDir = localGaS + target#./tmp/ops/server/python
 				remoteDir = source
 				# 将目录所有文件递归列出列表
-				remoteList = getAllFilesInRemoteDir(SftpClint, remoteDir)
+				remoteList = []
+				try:
+					remoteList = getAllFilesInRemoteDir(SftpClint, remoteDir)
+				except Exception as e:
+					SftpClint.close()
+					print(str(e))
+					DatasourcesService.exceptOne(datasource_id)
+					continue
 				# 将列表中的全部文件写入本地
 				for remote in remoteList:
 					local = localRootDir + remote[len(remoteDir):]

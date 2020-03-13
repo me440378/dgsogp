@@ -75,6 +75,14 @@ class DatasourcesService():
 			return reply(1, str(e))
 		return reply(0)
 
+	def exceptOne(id):
+		kvdict = {"excepted":1}
+		try:
+			Datasources.objects.using('admin_db').filter(pk = id).update(**kvdict)
+		except Exception as e:
+			return reply(1, str(e))
+		return reply(0)
+
 	def countAll():
 		re = None
 		try:

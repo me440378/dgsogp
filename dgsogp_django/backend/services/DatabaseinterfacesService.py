@@ -5,7 +5,7 @@ from backend.tools import countReply
 
 class DatabaseinterfacesService():
 	
-	def createOne(type, name, metadata_id):
+	def createOne(type, wserver, wport, name, datasource_id):
 		try:
 			databaseinterface = Databaseinterfaces.objects.using('admin_db').create(
 				type = type,
