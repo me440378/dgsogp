@@ -32,5 +32,6 @@ def readCollection(db, collectionname):
 	collection = db.get_collection(collectionname)
 	json_data = []
 	for document in collection.find():
+		document['_id'] = str(document['_id'])
 		json_data.append(document)
 	return json_data

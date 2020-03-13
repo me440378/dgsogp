@@ -28,10 +28,20 @@
                         }}
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="表名/集合名">                </el-table-column>
-                 <el-table-column label="数据接口http地址(GET方法)">
+                <el-table-column prop="name" label="表名/集合名"></el-table-column>
+                <el-table-column prop="metadata_id" label="元数据ID"></el-table-column>
+                <el-table-column label="数据接口http地址(GET方法)">
                     <template slot-scope="scope">
                         http://127.0.0.1:8000/api/1.0/datainterfaces/data/{{scope.row.id}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                            <el-button
+                                type="text"
+                                icon="el-icon-link"
+                                @click="handleOpen(scope.row)"
+                            >预览</el-button>
                     </template>
                 </el-table-column>
 <!--                 <el-table-column prop="state" label="入库状态">
@@ -75,12 +85,6 @@ export default {
                     "name": "dev.hadoop-server-test.data.iris.data",
                     "metadata_id": 1
                 },
-                {
-                    "id": 2,
-                    "type": 1,
-                    "name": "ops.hadoop-server-test.data.iris.data",
-                    "metadata_id": 2
-                }
             ],
             pageTotal: 10,
             idx: -1,
@@ -98,6 +102,11 @@ export default {
             }).catch(function(err){
                 console.log(err)
             })
+        },
+        handleOpen(row) {
+            let id = row.id
+            let url = 'http://127.0.0.1:8000/api/1.0/datainterfaces/data/'+id
+            window.open(url)
         },
         // 触发搜索按钮
         handleSearch() {
