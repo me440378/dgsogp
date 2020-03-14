@@ -89,37 +89,22 @@ export default {
                 {
                     icon: 'el-icon-lx-shopfill',
                     index: 'databaseinterfaces',
-                    title: '数据库接口管理'
+                    title: '数据库接口管理',
+                    subs: [
+                        {
+                            index: 'databaseinterfaces',
+                            title: '数据库接口'
+                        },
+                        {
+                            index: 'databasecommandline',
+                            title: '数据库命令行'
+                        },
+                    ]
                 },
                 {
                     icon: 'el-icon-lx-message',
                     index: 'messages',
                     title: '通知管理'
-                },
-                {
-                    icon: 'el-icon-lx-calendar',
-                    index: '3',
-                    title: '表单相关',
-                    subs: [
-                        {
-                            index: '3-1',
-                            title: '三级菜单',
-                            subs: [
-                                {
-                                    index: 'editor',
-                                    title: '富文本编辑器'
-                                },
-                                {
-                                    index: 'markdown',
-                                    title: 'markdown编辑器'
-                                }
-                            ]
-                        },
-                        {
-                            index: 'upload',
-                            title: '文件上传'
-                        }
-                    ]
                 },
                 {
                     icon: 'el-icon-lx-emoji',

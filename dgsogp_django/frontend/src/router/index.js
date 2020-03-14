@@ -50,6 +50,11 @@ export default new Router({
                     meta: { title: '数据库接口管理' }
                 },
                 {
+                    path: '/databasecommandline',
+                    component: () => import(/* webpackChunkName: "databasecommandline" */ '../components/pages/DatabaseCommandLine.vue'),
+                    meta: { title: '数据库命令行' }
+                },
+                {
                     path: '/messages',
                     component: () => import(/* webpackChunkName: "messages" */ '../components/pages/MessagesManage.vue'),
                     meta: { title: '通知管理' }
@@ -58,24 +63,6 @@ export default new Router({
                     path: '/icon',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/Icon.vue'),
                     meta: { title: '自定义图标' }
-                },
-                {
-                    // 富文本编辑器组件
-                    path: '/editor',
-                    component: () => import(/* webpackChunkName: "editor" */ '../components/page/VueEditor.vue'),
-                    meta: { title: '富文本编辑器' }
-                },
-                {
-                    // markdown组件
-                    path: '/markdown',
-                    component: () => import(/* webpackChunkName: "markdown" */ '../components/page/Markdown.vue'),
-                    meta: { title: 'markdown编辑器' }
-                },
-                {
-                    // 图片上传组件
-                    path: '/upload',
-                    component: () => import(/* webpackChunkName: "upload" */ '../components/page/Upload.vue'),
-                    meta: { title: '文件上传' }
                 },
                 {
                     // vue-schart组件
