@@ -32,6 +32,8 @@ INSTALLED_APPS = [
     #定时任务
     'django_crontab',
     'backend.apps.BackendConfig',
+    #websocket
+    'dwebsocket',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +73,13 @@ CORS_ORIGIN_WHITELIST = [
 ]
 # CORS 允许携带Cookie
 # CORS_ALLOW_CREDENTIALS = True
+
+#websocket
+import dwebsocket
+MIDDLEWARE_CLASSES = [
+    'dwebsocket.middleware.WebSocketMiddleware'  # 为所有的URL提供websocket，如果只是单独的视图需要可以不选
+]
+WEBSOCKET_ACCEPT_ALL=True   # 可以允许每一个单独的视图实用websockets
 
 # Add for vue.js
 STATICFILES_DIRS = [

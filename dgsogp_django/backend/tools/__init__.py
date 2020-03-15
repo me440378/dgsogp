@@ -14,5 +14,7 @@ from .dbtool import *
 from .mongotool import *
 #定时任务特定相关
 from .cronjobtool import *
+#数据库命令行相关
+from .dbclitool import *
 
 LOCAL_BASE = r'./tmp'

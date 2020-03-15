@@ -8,8 +8,14 @@ import './assets/css/icon.css';
 import './components/common/directives';
 import 'babel-polyfill';
 import axios from 'axios'
+import VueWebsocket from 'vue-websocket'
 
 Vue.config.productionTip = false;
+
+Vue.use(VueWebsocket, {
+    reconnection: false
+});
+
 Vue.use(ElementUI, {
     size: 'small'
 });
