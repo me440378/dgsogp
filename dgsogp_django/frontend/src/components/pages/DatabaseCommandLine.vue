@@ -12,7 +12,7 @@
                 <el-row>
                     <el-col :span="10">
                         <el-form-item label="工作服务器">
-                            <el-input v-model="form.wserver"></el-input>
+                            <el-input v-model="form.wserver" spellcheck="false"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="1">
@@ -20,7 +20,7 @@
                     </el-col>
                     <el-col :span="10">
                         <el-form-item label="工作端口">
-                            <el-input v-model="form.wport"></el-input>
+                            <el-input type="number" v-model="form.wport" spellcheck="false"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -38,19 +38,19 @@
                     </el-col>
                     <el-col :span="10">
                         <el-form-item label="数据库名/集合名">
-                            <el-input v-model="form.name"></el-input>
+                            <el-input v-model="form.name" spellcheck="false"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="用户名">
-                            <el-input v-model="form.username"></el-input>
+                            <el-input v-model="form.username" spellcheck="false"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="密码">
-                            <el-input v-model="form.password"></el-input>
+                            <el-input type="password" v-model="form.password" spellcheck="false"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="2">
@@ -65,7 +65,8 @@
                     </el-col>
                 </el-row>
             </el-form>
-            <el-input class="dbicmd" type="textarea" rows="20" v-model="cmd.content" spellcheck="false"></el-input>
+            <el-input class="dbicmd" id="dbitextarea" type="textarea" rows="20" v-model="cmd.content" spellcheck="false" :readonly="true"></el-input>
+            <el-input class="dbicmd" rows="1" v-model="cmd.line" spellcheck="false" @keyup.enter.native="onSend" ref="dbiinput"><template slot="prepend">></template></el-input>
         </div>
     </div>
 </template>
@@ -76,18 +77,18 @@
         data: function(){
             return {
                 websock: null,
-                timeout: 28*1000, //30s 一次心跳
-                timeoutObj: null, //心跳倒计时
                 form: {
-                    wserver: '',
-                    wport:'',
-                    type: '',
-                    name:'',
-                    username:'',
-                    password:'',
+                    wserver: 'hadoop-server-test',
+                    wport:'3306',
+                    type: '0',
+                    name:'xxx_db',
+                    username:'root',
+                    password:'123456',
                 },
                 cmd:{
                     content:'',
+                    histoty:'',
+                    line:'',
                 },
             }
         },
@@ -111,8 +112,12 @@
                     this.$message.error('请完整填写用户名与密码')
                     return  
                 }
-                console.log(key)
+                // console.log(key)
                 this.initWebSocket(key)
+                // 聚焦到输入行
+                this.$nextTick(()=>{
+                    this.$refs.dbiinput.focus()
+                })
             },
             onFinish() {
                 if(this.websock!=null){
@@ -124,26 +129,49 @@
                 this.websock = new WebSocket("ws://localhost:8000/api/1.0/databaseinterfaces/dbcli")
 
                 let me = this
-                // //连接成功
-                // this.websock.onopen = this.websocketonopen(key);
+                //连接成功
                 this.websock.onopen = function(event){
                     me.websock.send(JSON.stringify(key))
                 }
-                // this.websock.on('open',function(event){
-                //     this.websock.send(key)
-                // });
                 //连接错误
                 this.websock.onerror = function(event){
                     console.log("WebSocket连接发生错误")
-                    console.log(e)
+                    if(me.websock!=null){
+                        me.websock.close()
+                    }
                 }
                 //接收信息
                 this.websock.onmessage = function(event){
-                    console.log(event.data)
+                    if(event.data=="bye"){
+                        me.websock.close()
+                    }
+                    me.cmd.content+=event.data
+                    me.textareaScroll()
                 }
                 //连接关闭
-                this.websock.onclose = this.websocketclose;
+                this.websock.onclose = function(event){
+                    console.log("WebSocket连接已关闭")
+                    me.websock=null
+                    me.cmd.content+="\n数据库连接已关闭\n"
+                    me.textareaScroll()
+                }
             },
+            onSend(){
+                if(this.websock==null){
+                    this.cmd.content+="还未连接到数据库\n"
+                    this.textareaScroll()
+                    return
+                }
+                let key = this.cmd.line
+                this.websock.send(key)
+                this.cmd.line=''
+                this.cmd.content+=key+'\n'
+                this.textareaScroll()
+            },
+            textareaScroll(){
+                var textarea = document.getElementById('dbitextarea');
+                textarea.scrollTop = textarea.scrollHeight;
+            }
         },
         destroyed(){
             if(this.websock!=null){
@@ -155,6 +183,16 @@
 </script>
 <style>
 .dbicmd > textarea{
+    font-size: 18px;
+    color: #AAAAAA;
+    background-color: #080808;
+}
+.dbicmd > input{
+    font-size: 18px;
+    color: #AAAAAA;
+    background-color: #080808;
+}
+.dbicmd > div{
     font-size: 18px;
     color: #AAAAAA;
     background-color: #080808;
