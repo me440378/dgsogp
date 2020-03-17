@@ -68,6 +68,36 @@
             <el-input class="dbicmd" id="dbitextarea" type="textarea" rows="20" v-model="cmd.content" spellcheck="false" :readonly="true"></el-input>
             <el-input class="dbicmd" rows="1" v-model="cmd.line" spellcheck="false" @keyup.enter.native="onSend" ref="dbiinput"><template slot="prepend">></template></el-input>
         </div>
+
+        <!-- 编辑弹出框 -->
+        <el-dialog title="请使用adminMongo" :visible.sync="mongoVisible" width="45%">
+            <el-form ref="form" :model="form.data" label-width="168px">
+                <el-form-item label="adminMongo链接">
+                    <el-row>
+                        <el-col :span="20">
+                            <span>{{form.data.adminMongoUrl}}</span>
+                        </el-col>
+                        <el-col :span="4">
+                            <el-button type="primary" @click="handleOpen">打开</el-button>
+                        </el-col>
+                    </el-row>
+                </el-form-item>
+                <el-form-item label="MongoDB标准链接URI">
+                    <el-row>
+                        <el-col :span="20">
+                            <span>{{form.data.mongodbUrl}}</span>
+                        </el-col>
+                        <el-col :span="4">
+                            <el-button type="primary" v-clipboard:copy="form.data.mongodbUrl" v-clipboard:success="onCopySuccess" v-clipboard:error="onCopyError">复制</el-button>
+                        </el-col>
+                    </el-row>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="mongoVisible = false">关 闭</el-button>
+            </span>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -79,17 +109,22 @@
                 websock: null,
                 form: {
                     wserver: 'hadoop-server-test',
-                    wport:'3306',
-                    type: '0',
+                    wport:'27017',
+                    type: '1',
                     name:'xxx_db',
                     username:'root',
                     password:'123456',
+                    data:{
+                        adminMongoUrl:'',
+                        mongodbUrl:'',
+                    },
                 },
                 cmd:{
                     content:'',
                     histoty:'',
                     line:'',
                 },
+                mongoVisible: false,
             }
         },
         methods: {
@@ -112,12 +147,22 @@
                     this.$message.error('请完整填写用户名与密码')
                     return  
                 }
-                // console.log(key)
-                this.initWebSocket(key)
-                // 聚焦到输入行
-                this.$nextTick(()=>{
-                    this.$refs.dbiinput.focus()
-                })
+                if(key.type=='0'){
+                    // MySQL
+                    // console.log(key)
+                    this.initWebSocket(key)
+                    // 聚焦到输入行
+                    this.$nextTick(()=>{
+                        this.$refs.dbiinput.focus()
+                    })
+                } else {
+                    //MongoDB
+                    this.form.data.adminMongoUrl=this.adminMongoUrl
+                    this.form.data.mongodbUrl='mongodb://'+key.username+':'+key.password+'@'+key.wserver+':'+key.wport+'/'+key.name
+                    //Connection string: mongodb://<user>:<password>@<host>:<port>/<db>
+                    this.mongoVisible=true
+                }
+                
             },
             onFinish() {
                 if(this.websock!=null){
@@ -171,7 +216,18 @@
             textareaScroll(){
                 var textarea = document.getElementById('dbitextarea');
                 textarea.scrollTop = textarea.scrollHeight;
-            }
+            },
+            handleOpen() {
+                let url = this.form.data.adminMongoUrl
+                window.open(url)
+            },
+            onCopySuccess(event) {
+                this.$message.success('复制成功')
+            },
+            onCopyError(event) {
+                this.$message.error('复制失败')
+                console.log(event)
+            },
         },
         destroyed(){
             if(this.websock!=null){

@@ -9,9 +9,14 @@ import './components/common/directives';
 import 'babel-polyfill';
 import axios from 'axios'
 import VueWebsocket from 'vue-websocket'
+import VueClipboard from 'vue-clipboard2'
 
 Vue.config.productionTip = false;
 
+/* Vue Clipboard 粘贴板*/
+Vue.use(VueClipboard)
+
+/* Vue WebSocket */
 Vue.use(VueWebsocket, {
     reconnection: false
 });
@@ -19,6 +24,9 @@ Vue.use(VueWebsocket, {
 Vue.use(ElementUI, {
     size: 'small'
 });
+
+/* adminMongo */
+Vue.prototype.adminMongoUrl = "http://192.168.191.10:8025/app/connection_list"
 
 /* HTTP请求 */
 var Axios = axios;
