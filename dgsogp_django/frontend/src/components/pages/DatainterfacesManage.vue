@@ -32,7 +32,7 @@
                 <el-table-column prop="metadata_id" label="元数据ID"></el-table-column>
                 <el-table-column label="数据接口http地址(GET方法)">
                     <template slot-scope="scope">
-                        http://127.0.0.1:8000/api/1.0/datainterfaces/data/{{scope.row.id}}
+                        {{dataInterfacesBaseUrl}}/{{scope.row.id}}
                     </template>
                 </el-table-column>
                 <el-table-column label="操作">
@@ -44,15 +44,6 @@
                             >预览</el-button>
                     </template>
                 </el-table-column>
-<!--                 <el-table-column prop="state" label="入库状态">
-                    <template slot-scope="scope">
-                        {{
-                            scope.row.state == '0' ? "未标记" :
-                            scope.row.state == '1' ? "持续标记中" :
-                            scope.row.state == '2' ? "已完成或无需入库" : ""
-                        }}
-                    </template>
-                </el-table-column> -->
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -78,14 +69,8 @@ export default {
                 pageIndex: 1,
                 pageSize: 10
             },
-            tableData: [
-                {
-                    "id": 1,
-                    "type": 0,
-                    "name": "dev.hadoop-server-test.data.iris.data",
-                    "metadata_id": 1
-                },
-            ],
+            tableData: [],
+            dataInterfacesBaseUrl:'',
             pageTotal: 10,
             idx: -1,
             id: -1
@@ -93,6 +78,7 @@ export default {
     },
     mounted() {
         this.getData();
+        this.dataInterfacesBaseUrl = this.DataInterfacesBaseUrl
     },
     methods: {
         getData() {
@@ -105,7 +91,7 @@ export default {
         },
         handleOpen(row) {
             let id = row.id
-            let url = 'http://127.0.0.1:8000/api/1.0/datainterfaces/data/'+id
+            let url = this.dataInterfacesBaseUrl+'/'+id
             window.open(url)
         },
         // 触发搜索按钮
@@ -117,7 +103,7 @@ export default {
             this.$set(this.query, 'pageIndex', val);
             this.getData();
         }
-    }
+    },
 };
 </script>
 

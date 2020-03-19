@@ -60,18 +60,7 @@ export default {
                 pageIndex: 1,
                 pageSize: 10
             },
-            tableData: [
-                {
-                    "id": 1,
-                    "source": "/dev/hadoop-server-test/iris.data",
-                    "amount": 150,
-                    "feature": 5,
-                    "hashsum": "7a1c6dc40b600415d7113cf9e0b1aab5",
-                    "hadoopsource_id": 1,
-                    "format": "data",
-                    "state": 2
-                },
-            ],
+            tableData: [],
             pageTotal: 10,
             idx: -1,
             id: -1

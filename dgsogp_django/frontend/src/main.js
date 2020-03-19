@@ -28,6 +28,9 @@ Vue.use(ElementUI, {
 /* adminMongo */
 Vue.prototype.adminMongoUrl = "http://192.168.191.10:8025/app/connection_list"
 
+/* 数据接口 */
+Vue.prototype.DataInterfacesBaseUrl = "http://127.0.0.1:8000/api/1.0/datainterfaces/data"
+
 /* HTTP请求 */
 var Axios = axios;
 

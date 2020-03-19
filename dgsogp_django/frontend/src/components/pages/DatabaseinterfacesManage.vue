@@ -67,16 +67,7 @@ export default {
                 pageIndex: 1,
                 pageSize: 10
             },
-            tableData: [
-                {
-                    "id": 1,
-                    "type": 0,
-                    "wserver": "hadoop-server-test",
-                    "wport": "3306",
-                    "name": "xxx_db",
-                    "datasource_id": 3
-                },
-            ],
+            tableData: [],
             pageTotal: 10,
             idx: -1,
             id: -1

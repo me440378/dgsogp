@@ -246,22 +246,7 @@ export default {
                 pageIndex: 1,
                 pageSize: 10
             },
-            tableData: [
-                {
-                    "id": 1,
-                    "wgroup": "dev",
-                    "wserver": "hadoop-server-test",
-                    "type": 0,
-                    "source": "/home/wing/Code/base/python/iris.data",
-                    "putindb": 0,
-                    "related": 0,
-                    "pattern": 0,
-                    "target": "/iris.data",
-                    "state": 2,
-                    "content": "花朵分类数据",
-                    "excepted": 0
-                },
-            ],
+            tableData: [],
             editVisible: false,
             createVisible: false,
             pageTotal: 4,
