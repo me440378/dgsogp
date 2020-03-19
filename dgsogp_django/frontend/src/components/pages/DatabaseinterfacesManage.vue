@@ -24,7 +24,8 @@
                     <template slot-scope="scope">
                         {{
                             scope.row.type == '0' ? "mysql" :
-                            scope.row.type == '1' ? "mongodb" : ""
+                            scope.row.type == '1' ? "mongodb" :
+                            scope.row.type == '2' ? "redis" : ""
                         }}
                     </template>
                 </el-table-column>
@@ -32,6 +33,15 @@
                 <el-table-column prop="wport" label="工作端口"></el-table-column>
                 <el-table-column prop="name" label="数据库名"></el-table-column>
                 <el-table-column prop="datasource_id" label="数据源ID"></el-table-column>
+                <el-table-column label="操作" width="180" align="center">
+                    <template slot-scope="scope">
+                        <el-button
+                            type="primary"
+                            icon="el-icon-edit"
+                            @click="handleJump(scope.row)"
+                        >进行操作</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -92,6 +102,17 @@ export default {
         handlePageChange(val) {
             this.$set(this.query, 'pageIndex', val);
             this.getData();
+        },
+        handleJump(row) {
+            let key = {}
+            key.type = row.type
+            key.wserver = row.wserver
+            key.wport = row.wport
+            key.name = row.name
+            this.$router.push({
+               path:"/databasecommandline",
+               query:key,
+            });
         }
     }
 };

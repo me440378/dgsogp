@@ -102,7 +102,7 @@ def collectDataFromServers():
 				# source格式： type:wport/name
 				# wserver、datasource_id 从 Datasource 获取
 				databaseinterface = {
-					'type':0 if source[: source.index(':')]=='mysql' else 1,
+					'type':0 if source[: source.index(':')]=='mysql' else 1 if source[: source.index(':')]=='mongodb' else 2,
 					'wserver':wserver,
 					'wport':source[source.index(':')+1 : source.index('/')],
 					'name':source[source.index('/')+1 :],

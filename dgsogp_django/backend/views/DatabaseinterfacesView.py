@@ -8,6 +8,7 @@ from backend.services import DatabaseinterfacesService
 ##dbcli package
 from backend.tools import DB
 from backend.tools import MySql
+from backend.tools import Redis
 import pymysql
 
 class DatabaseinterfacesView(APIView):
@@ -55,17 +56,15 @@ class DatabaseCommandLine():
 				'host':json_dict['wserver'],
 				'port':json_dict['wport'],
 				'dbname':json_dict['name'],
-				'user':json_dict['username'],
-				'passwd':json_dict['password']
+				'user':json_dict['username'] if 'username' in json_dict.keys() else "",
+				'passwd':json_dict['password'] if 'password' in json_dict.keys() else "",
 			}
 
-			# dir(request.websocket) # ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__iter__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_get_new_messages', '_message_queue', 'accept_connection', 'close', 'closed', 'count_messages', 'handle', 'has_messages', 'is_close', 'is_closed', 'protocol', 'read', 'send', 'wait']
 			mydb = ""
 			if dbtype == '0':
 				mydb = MySql(**params)
 				if isinstance(mydb.db, dict):
 					message = "未能成功连接到数据库，报错信息：{}\n".format(mydb.db['detail']).encode('utf-8')
-					# print(message.decode('utf-8'))
 					ws.send(message)
 					ws.send('bye')
 					ws.wait()
@@ -92,6 +91,33 @@ class DatabaseCommandLine():
 						except pymysql.err.ProgrammingError as mysqlSyntaxErr:
 							ws.send(str(mysqlSyntaxErr))
 							continue
+						except Exception as err:
+						    ws.send(str(err))
+					mydb.close()
+					ws.send('bye')
+					ws.wait()
+			elif dbtype == '2':
+				mydb = Redis(**params)
+				if isinstance(mydb.db, dict):
+					message = "未能成功连接到数据库，报错信息：{}\n".format(mydb.db['detail']).encode('utf-8')
+					ws.send(message)
+					ws.send('bye')
+					ws.wait()
+				else:
+					ws.send("已成功连接到数据库".encode('utf-8'))
+					if params['passwd']:
+						ws.send(mydb.exec("auth "+params['passwd']))
+					while True:
+						ws.send("\n>")
+						msg = ws.wait()
+						if not msg:
+							ws.close()
+							return
+						cmd = msg.decode()
+						if cmd == "exit":
+							break
+						try:
+							ws.send(mydb.exec(cmd))
 						except Exception as err:
 						    ws.send(str(err))
 					mydb.close()

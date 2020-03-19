@@ -52,7 +52,7 @@ export default new Router({
                 {
                     path: '/databasecommandline',
                     component: () => import(/* webpackChunkName: "databasecommandline" */ '../components/pages/DatabaseCommandLine.vue'),
-                    meta: { title: '数据库命令行' }
+                    meta: { title: '数据库接口操作' }
                 },
                 {
                     path: '/messages',

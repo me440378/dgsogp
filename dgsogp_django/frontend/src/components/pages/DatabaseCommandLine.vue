@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-shopfill"></i> 数据库接口命令行
+                    <i class="el-icon-lx-shopfill"></i> 数据库接口操作
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -30,6 +30,7 @@
                             <el-radio-group v-model="form.type">
                                 <el-radio label="0">MySQL</el-radio>
                                 <el-radio label="1">MongoDB</el-radio>
+                                <el-radio label="2">Redis</el-radio>
                             </el-radio-group>
                         </el-form-item>
                     </el-col>
@@ -108,12 +109,12 @@
             return {
                 websock: null,
                 form: {
-                    wserver: 'hadoop-server-test',
-                    wport:'27017',
-                    type: '1',
-                    name:'xxx_db',
-                    username:'root',
-                    password:'123456',
+                    wserver: '',
+                    wport:'',
+                    type: '',
+                    name:'',
+                    username:'',
+                    password:'',
                     data:{
                         adminMongoUrl:'',
                         mongodbUrl:'',
@@ -140,14 +141,8 @@
                     this.$message.error('请完整填写必要信息')
                     return
                 }
-                if (this.form.username&&this.form.password) {
-                    key.username = this.form.username
-                    key.password = this.form.password
-                } else {
-                    this.$message.error('请完整填写用户名与密码')
-                    return  
-                }
-                if(key.type=='0'){
+
+                if(key.type=='0'||key.type=='2'){
                     // MySQL
                     // console.log(key)
                     this.initWebSocket(key)
@@ -228,6 +223,18 @@
                 this.$message.error('复制失败')
                 console.log(event)
             },
+            onRoute(){
+                this.form.type = this.$route.query.type+''
+                this.form.wserver = this.$route.query.wserver            
+                this.form.wport = this.$route.query.wport            
+                this.form.name = this.$route.query.name
+            },
+        },
+        watch: {
+            '$route': 'onRoute'
+        },
+        mounted(){
+            this.onRoute()
         },
         destroyed(){
             if(this.websock!=null){

@@ -91,15 +91,15 @@ WSGI_APPLICATION = 'dgsogp_django.wsgi.application'
 # Crontab
 CRONJOBS = [
     #定时测试任务
-    ('*/1 * * * *', 'backend.cronjobs.testjob'),
+    # ('* * * * *', 'backend.cronjobs.testjob'),
     #从远端采集到本地再上传HDFS，创建Hadoopsources
-    # ('0 0 * * *', 'backend.cronjobs.collectDataFromServers'),
+    ('* * * * *', 'backend.cronjobs.collectDataFromServers'),
     #将HDFS上的文件下载到本地，创建Metadata
-    # ('0 0 * * *', 'backend.cronjobs.scanHadoopPutInDB'),
+    ('* * * * *', 'backend.cronjobs.scanHadoopPutInDB'),
     #将HDFS上的文件下载到本地，根据Metadata入库
-    # ('0 0 * * *', 'backend.cronjobs.scanHadoopTagMetadata'),
+    ('* * * * *', 'backend.cronjobs.scanHadoopTagMetadata'),
     #清空本地暂存目录
-    # ('0 0 * * *', 'backend.cronjobs.freeLocalBaseDir'),
+    ('0 0 * * *', 'backend.cronjobs.freeLocalBaseDir'),
 ]
 
 # Database

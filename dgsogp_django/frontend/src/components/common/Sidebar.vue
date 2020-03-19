@@ -97,7 +97,7 @@ export default {
                         },
                         {
                             index: 'databasecommandline',
-                            title: '数据库命令行'
+                            title: '数据库操作'
                         },
                     ]
                 },
