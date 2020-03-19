@@ -142,6 +142,8 @@
                     return
                 }
 
+                key.username = this.form.username
+                key.password = this.form.password
                 if(key.type=='0'||key.type=='2'){
                     // MySQL
                     // console.log(key)
@@ -164,6 +166,7 @@
                     this.websock.close()
                 }
                 this.websock=null
+                this.textareaScroll()
             },
             initWebSocket(key){
                 this.websock = new WebSocket("ws://localhost:8000/api/1.0/databaseinterfaces/dbcli")
