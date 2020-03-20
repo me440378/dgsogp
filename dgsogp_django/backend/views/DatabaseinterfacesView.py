@@ -50,7 +50,7 @@ class DatabaseCommandLine():
 			json_bytes = ws.wait()
 			json_str = json_bytes.decode()
 			json_dict = json.loads(json_str)
-			print(json_dict)
+			# print(json_dict) # {'wserver': 'hadoop-server-test', 'wport': '3306', 'type': '0', 'name': 'xxx_db', 'username': 'xxx', 'password': '123456'}
 			dbtype = json_dict['type']
 			params = {
 				'host':json_dict['wserver'],

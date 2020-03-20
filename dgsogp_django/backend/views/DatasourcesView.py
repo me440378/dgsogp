@@ -7,8 +7,14 @@ from backend.services import DatasourcesService
 class DatasourcesView(APIView):
 
 	def get(self, request):
-		result = DatasourcesService.readAll()
-		return Response(result)
+		select = request.GET.get('select')
+		key = request.GET.get('key')
+		if select and key:
+			result = DatasourcesService.readByCondition(select, key)
+			return Response(result)
+		else:
+			result = DatasourcesService.readAll()
+			return Response(result)
 
 	def post(self, request):
 		json_bytes = request.body

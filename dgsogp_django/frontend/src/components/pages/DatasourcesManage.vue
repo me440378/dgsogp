@@ -8,11 +8,32 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-            <div class="handle-box">
-                <el-input v-model="query.name" placeholder="" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
-                <el-button type="primary" icon="el-icon-lx-add" @click="handleCreate">添加数据源</el-button>
-            </div>
+            <el-row class="handle-box">
+                <el-col :span="8">
+                    <el-input v-model="query.key" placeholder="" class="input-with-select">
+                        <el-select v-model="query.select" slot="prepend" placeholder="请选择" style="width: 130px;">
+                          <el-option label="工作组" value="wgroup"></el-option>
+                          <el-option label="工作服务器" value="wserver"></el-option>
+                          <el-option label="数据源类型" value="type"></el-option>
+                          <el-option label="路径/数据库" value="source"></el-option>
+                          <el-option label="是否入库" value="putindb"></el-option>
+                          <el-option label="结构存储形式" value="related"></el-option>
+                          <el-option label="采集模式" value="pattern"></el-option>
+                          <el-option label="hadoop路径" value="target"></el-option>
+                          <el-option label="处理状态" value="state"></el-option>
+                          <el-option label="备注" value="content"></el-option>
+                          <el-option label="异常状态" value="excepted"></el-option>
+                        </el-select>
+                        <el-button type="primary" icon="el-icon-search" @click="handleSearch" slot="append">搜索</el-button>
+                    </el-input>
+                </el-col>
+                <el-col :span="1">
+                    &nbsp;
+                </el-col>
+                <el-col :span="2">
+                    <el-button type="primary" icon="el-icon-lx-add" @click="handleCreate">添加数据源</el-button>
+                </el-col>
+            </el-row>
             <el-table
                 :data="tableData"
                 border
@@ -241,8 +262,8 @@ export default {
     data() {
         return {
             query: {
-                name: '',
-                nickname: '',
+                select:'',
+                key:'',
                 pageIndex: 1,
                 pageSize: 10
             },
@@ -284,7 +305,46 @@ export default {
         },
         // 触发搜索按钮
         handleSearch() {
-            this.getData();
+            let key = {}
+            if (this.query.select&&this.query.key) {
+                key.select=this.query.select
+                key.key=this.query.key
+                if(key.select=='type'){
+                    key.key=(key.key=='文件')?'0':
+                            (key.key=='目录')?'1':
+                            (key.key=='数据库')?'2':key.key
+                }
+                if(key.select=='putindb'){
+                    key.key=(key.key=='是')?'0':
+                            (key.key=='否')?'1':key.key
+                }
+                if(key.select=='related'){
+                    key.key=(key.key=='关系型')?'0':
+                            (key.key=='非关系型')?'1':key.key
+                }
+                if(key.select=='pattern'){
+                    key.key=(key.key=='只采集一次')?'0':
+                            (key.key=='每天采集一次')?'1':key.key
+                }
+                if(key.select=='state'){
+                    key.key=(key.key=='未采集')?'0':
+                            (key.key=='持续采集中')?'1':
+                            (key.key=='已完成')?'2':key.key
+                }
+                if(key.select=='excepted'){
+                    key.key=(key.key=='正常')?'0':
+                            (key.key=='异常')?'1':key.key
+                } 
+            } else {
+                key.select=''
+                key.key=''
+            }
+            var me = this
+            this.$get(`/datasources?select=${key.select}&key=${key.key}`).then(res=>{
+                me.tableData = res.data
+            }).catch(function(err){
+                console.log(err)
+            })
         },
         // 删除操作
         handleDelete(row) {
@@ -454,5 +514,8 @@ export default {
     margin: auto;
     width: 40px;
     height: 40px;
+}
+.input-with-select{
+    background-color: #ffffff;
 }
 </style>
