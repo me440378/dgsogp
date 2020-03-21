@@ -7,8 +7,14 @@ from backend.services import UsersService
 class UsersView(APIView):
 
 	def get(self, request):
-		result = UsersService.readAll()
-		return Response(result)
+		select = request.GET.get('select')
+		key = request.GET.get('key')
+		if select and key:
+			result = UsersService.readByCondition(select, key)
+			return Response(result)
+		else:
+			result = UsersService.readAll()
+			return Response(result)
 
 	def post(self, request):
 		json_bytes = request.body

@@ -7,8 +7,14 @@ from backend.services import DatainterfacesService
 class DatainterfacesView(APIView):
 
 	def get(self, request):
-		result = DatainterfacesService.readAll()
-		return Response(result)
+		select = request.GET.get('select')
+		key = request.GET.get('key')
+		if select and key:
+			result = DatainterfacesService.readByCondition(select, key)
+			return Response(result)
+		else:
+			result = DatainterfacesService.readAll()
+			return Response(result)
 
 	def post(self, request):
 		json_bytes = request.body

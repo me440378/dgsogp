@@ -7,8 +7,16 @@ from backend.services import MetadataService
 class MetadataView(APIView):
 
 	def get(self, request):
-		result = MetadataService.readAll()
-		return Response(result)
+		pageIndex = request.GET.get('pageIndex')
+		pageSize = request.GET.get('pageSize')
+		select = request.GET.get('select')
+		key = request.GET.get('key')
+		if select and key:
+			result = MetadataService.readByCondition(pageIndex, pageSize, select, key)
+			return Response(result)
+		else:
+			result = MetadataService.readAll(pageIndex, pageSize)
+			return Response(result)
 
 	def post(self, request):
 		json_bytes = request.body

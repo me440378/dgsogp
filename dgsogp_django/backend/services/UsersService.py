@@ -33,6 +33,16 @@ class UsersService():
 		except Exception as e:
 			return reply(1, str(e))
 		return result.data
+
+	def readByCondition(select, key):
+		re = None
+		kvdict = {select: key}
+		try:
+			re = Users.objects.using('admin_db').filter(**kvdict)
+			result = UsersSerializer(re, many = True)
+		except Exception as e:
+			return reply(1, str(e))
+		return result.data
 		
 	def readOne(id):
 		re = None

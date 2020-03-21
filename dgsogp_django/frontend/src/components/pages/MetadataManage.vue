@@ -61,7 +61,7 @@ export default {
                 pageSize: 10
             },
             tableData: [],
-            pageTotal: 10,
+            pageTotal: 0,
             idx: -1,
             id: -1
         };
@@ -71,9 +71,11 @@ export default {
     },
     methods: {
         getData() {
+            let key = this.query
             var me = this
-            this.$get("/metadata").then(res=>{
-                me.tableData = res.data
+            this.$get(`/metadata?pageIndex=${key.pageIndex}&pageSize=${key.pageSize}`).then(res=>{
+                me.tableData = res.data.data
+                me.pageTotal = res.data.total
             }).catch(function(err){
                 console.log(err)
             })
@@ -85,6 +87,7 @@ export default {
         // 分页导航
         handlePageChange(val) {
             this.$set(this.query, 'pageIndex', val);
+            console.log(val)
             this.getData();
         }
     }

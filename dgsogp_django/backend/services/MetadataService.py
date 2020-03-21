@@ -1,6 +1,7 @@
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from backend.models import Metadata
 from backend.serializers import MetadataSerializer
-from backend.tools import reply
+from backend.tools import reply, dtReply
 
 class MetadataService():
 
@@ -19,10 +20,26 @@ class MetadataService():
 			return reply(1, str(e))
 		return reply(0)
 
-	def readAll():
-		re = None
+	def readAll(pageIndex, pageSize):
 		try:
 			re = Metadata.objects.using('admin_db').all()
+			paginator = Paginator(re, pageSize)
+			page = paginator.page(pageIndex)
+		except PageNotAnInteger:
+			page = paginator.page(1)
+		except EmptyPage:
+			page = paginator.page(paginator.num_page)
+		except Exception as e:
+			return reply(1, str(e))
+		result = MetadataSerializer(page, many = True)
+		total = Metadata.objects.using('admin_db').count()
+		return dtReply(result.data, total)
+
+	def readByCondition(pageIndex, pageSize, select, key):
+		re = None
+		kvdict = {select: key}
+		try:
+			re = Metadata.objects.using('admin_db').filter(**kvdict)
 			result = MetadataSerializer(re, many = True)
 		except Exception as e:
 			return reply(1, str(e))

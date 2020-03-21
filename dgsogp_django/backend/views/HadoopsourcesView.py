@@ -7,8 +7,14 @@ from backend.services import HadoopsourcesService
 class HadoopsourcesView(APIView):
 
 	def get(self, request):
-		result = HadoopsourcesService.readAll()
-		return Response(result)
+		select = request.GET.get('select')
+		key = request.GET.get('key')
+		if select and key:
+			result = HadoopsourcesService.readByCondition(select, key)
+			return Response(result)
+		else:
+			result = HadoopsourcesService.readAll()
+			return Response(result)
 
 	def post(self, request):
 		json_bytes = request.body

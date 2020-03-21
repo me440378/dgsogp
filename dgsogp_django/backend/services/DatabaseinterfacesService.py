@@ -27,6 +27,16 @@ class DatabaseinterfacesService():
 			return reply(1, str(e))
 		return result.data
 
+	def readByCondition(select, key):
+		re = None
+		kvdict = {select: key}
+		try:
+			re = Databaseinterfaces.objects.using('admin_db').filter(**kvdict)
+			result = DatabaseinterfacesSerializer(re, many = True)
+		except Exception as e:
+			return reply(1, str(e))
+		return result.data
+
 	def readOne(id):
 		re = None
 		try:

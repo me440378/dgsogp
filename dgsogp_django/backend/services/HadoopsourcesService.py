@@ -24,6 +24,16 @@ class HadoopsourcesService():
 			return reply(1, str(e))
 		return result.data
 
+	def readByCondition(select, key):
+		re = None
+		kvdict = {select: key}
+		try:
+			re = Hadoopsources.objects.using('admin_db').filter(**kvdict)
+			result = HadoopsourcesSerializer(re, many = True)
+		except Exception as e:
+			return reply(1, str(e))
+		return result.data
+
 	def readOne(id):
 		re = None
 		try:

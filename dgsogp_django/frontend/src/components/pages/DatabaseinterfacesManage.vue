@@ -63,6 +63,7 @@ export default {
     data() {
         return {
             query: {
+                select: '',
                 key: '',
                 pageIndex: 1,
                 pageSize: 10
@@ -87,7 +88,25 @@ export default {
         },
         // 触发搜索按钮
         handleSearch() {
-            this.getData();
+            let key = {}
+            if (this.query.select&&this.query.key) {
+                key.select=this.query.select
+                key.key=this.query.key
+                if(key.select=='type'){
+                    key.key=(key.key=='mysql')?'0':
+                            (key.key=='mongodb')?'1':
+                            (key.key=='redis')?'2':key.key
+                }
+            } else {
+                key.select=''
+                key.key=''
+            }
+            var me = this
+            this.$get(`/databaseinterfaces?select=${key.select}&key=${key.key}`).then(res=>{
+                me.tableData = res.data
+            }).catch(function(err){
+                console.log(err)
+            })
         },
         // 分页导航
         handlePageChange(val) {
