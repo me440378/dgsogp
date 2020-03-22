@@ -7,13 +7,15 @@ from backend.services import UsersService
 class UsersView(APIView):
 
 	def get(self, request):
+		pageIndex = request.GET.get('pageIndex')
+		pageSize = request.GET.get('pageSize')
 		select = request.GET.get('select')
 		key = request.GET.get('key')
 		if select and key:
-			result = UsersService.readByCondition(select, key)
+			result = UsersService.readByCondition(pageIndex, pageSize, select, key)
 			return Response(result)
 		else:
-			result = UsersService.readAll()
+			result = UsersService.readAll(pageIndex, pageSize)
 			return Response(result)
 
 	def post(self, request):

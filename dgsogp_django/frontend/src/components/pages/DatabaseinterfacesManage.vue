@@ -8,10 +8,21 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-            <div class="handle-box">
-                <el-input v-model="query.key" placeholder="" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
-            </div>
+            <el-row class="handle-box">
+                <el-col :span="8">
+                    <el-input v-model="query.key" placeholder="" class="input-with-select">
+                        <el-select v-model="query.select" slot="prepend" placeholder="请选择" style="width: 130px;">
+                            <el-option label="ID" value="id"></el-option>
+                            <el-option label="数据库类型" value="type"></el-option>
+                            <el-option label="工作服务器" value="wserver"></el-option>
+                            <el-option label="工作端口" value="wport"></el-option>
+                            <el-option label="数据库名" value="name"></el-option>
+                            <el-option label="数据源ID" value="datasource_id"></el-option>
+                        </el-select>
+                        <el-button type="primary" icon="el-icon-search" @click="handleSearch" slot="append">搜索</el-button>
+                    </el-input>
+                </el-col>
+            </el-row>
             <el-table
                 :data="tableData"
                 border
@@ -79,19 +90,8 @@ export default {
     },
     methods: {
         getData() {
-            var me = this
-            this.$get("/databaseinterfaces").then(res=>{
-                me.tableData = res.data
-            }).catch(function(err){
-                console.log(err)
-            })
-        },
-        // 触发搜索按钮
-        handleSearch() {
-            let key = {}
-            if (this.query.select&&this.query.key) {
-                key.select=this.query.select
-                key.key=this.query.key
+            let key = this.query
+            if (key.select&&key.key) {
                 if(key.select=='type'){
                     key.key=(key.key=='mysql')?'0':
                             (key.key=='mongodb')?'1':
@@ -102,11 +102,16 @@ export default {
                 key.key=''
             }
             var me = this
-            this.$get(`/databaseinterfaces?select=${key.select}&key=${key.key}`).then(res=>{
-                me.tableData = res.data
+            this.$get(`/databaseinterfaces?pageIndex=${key.pageIndex}&pageSize=${key.pageSize}&select=${key.select}&key=${key.key}`).then(res=>{
+                me.tableData = res.data.data
+                me.pageTotal = res.data.total
             }).catch(function(err){
                 console.log(err)
             })
+        },
+        // 触发搜索按钮
+        handleSearch() {
+            this.getData()
         },
         // 分页导航
         handlePageChange(val) {

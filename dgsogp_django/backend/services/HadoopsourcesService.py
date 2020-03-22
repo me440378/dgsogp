@@ -1,6 +1,8 @@
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 from backend.models import Hadoopsources
 from backend.serializers import HadoopsourcesSerializer
-from backend.tools import reply
+from backend.tools import reply, dtReply
 
 class HadoopsourcesService():
 
@@ -15,24 +17,36 @@ class HadoopsourcesService():
 			return reply(1, str(e))
 		return reply(0)
 
-	def readAll():
-		re = None
+	def readAll(pageIndex, pageSize):
 		try:
 			re = Hadoopsources.objects.using('admin_db').all()
-			result = HadoopsourcesSerializer(re, many = True)
+			paginator = Paginator(re, pageSize)
+			page = paginator.page(pageIndex)
+		except PageNotAnInteger:
+			page = paginator.page(1)
+		except EmptyPage:
+			page = paginator.page(paginator.num_page)
 		except Exception as e:
 			return reply(1, str(e))
-		return result.data
+		result = HadoopsourcesSerializer(page, many = True)
+		total = Hadoopsources.objects.using('admin_db').count()
+		return dtReply(result.data, total)
 
-	def readByCondition(select, key):
-		re = None
-		kvdict = {select: key}
+	def readByCondition(pageIndex, pageSize, select, key):
 		try:
+			kvdict = {select: key}
 			re = Hadoopsources.objects.using('admin_db').filter(**kvdict)
-			result = HadoopsourcesSerializer(re, many = True)
+			paginator = Paginator(re, pageSize)
+			page = paginator.page(pageIndex)
+		except PageNotAnInteger:
+			page = paginator.page(1)
+		except EmptyPage:
+			page = paginator.page(paginator.num_page)
 		except Exception as e:
 			return reply(1, str(e))
-		return result.data
+		result = HadoopsourcesSerializer(page, many = True)
+		total = re.count()
+		return dtReply(result.data, total)
 
 	def readOne(id):
 		re = None

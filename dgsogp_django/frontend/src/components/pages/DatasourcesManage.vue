@@ -12,6 +12,7 @@
                 <el-col :span="8">
                     <el-input v-model="query.key" placeholder="" class="input-with-select">
                         <el-select v-model="query.select" slot="prepend" placeholder="请选择" style="width: 130px;">
+                          <el-option label="ID" value="id"></el-option>
                           <el-option label="工作组" value="wgroup"></el-option>
                           <el-option label="工作服务器" value="wserver"></el-option>
                           <el-option label="数据源类型" value="type"></el-option>
@@ -265,12 +266,12 @@ export default {
                 select:'',
                 key:'',
                 pageIndex: 1,
-                pageSize: 10
+                pageSize: 10,
             },
             tableData: [],
             editVisible: false,
             createVisible: false,
-            pageTotal: 4,
+            pageTotal: 0,
             form: {
                 data:{
                     id:'',
@@ -285,10 +286,8 @@ export default {
                     content:'',
                     excepted:'',
                     finish: 'false',
-                }
+                },
             },
-            idx: -1,
-            id: -1
         };
     },
     mounted() {
@@ -296,19 +295,8 @@ export default {
     },
     methods: {
         getData() {
-            var me = this
-            this.$get("/datasources").then(res=>{
-                me.tableData = res.data
-            }).catch(function(err){
-                console.log(err)
-            })
-        },
-        // 触发搜索按钮
-        handleSearch() {
-            let key = {}
-            if (this.query.select&&this.query.key) {
-                key.select=this.query.select
-                key.key=this.query.key
+            let key = this.query
+            if (key.select&&key.key) {
                 if(key.select=='type'){
                     key.key=(key.key=='文件')?'0':
                             (key.key=='目录')?'1':
@@ -340,11 +328,16 @@ export default {
                 key.key=''
             }
             var me = this
-            this.$get(`/datasources?select=${key.select}&key=${key.key}`).then(res=>{
-                me.tableData = res.data
+            this.$get(`/datasources?pageIndex=${key.pageIndex}&pageSize=${key.pageSize}&select=${key.select}&key=${key.key}`).then(res=>{
+                me.tableData = res.data.data
+                me.pageTotal = res.data.total
             }).catch(function(err){
                 console.log(err)
             })
+        },
+        // 触发搜索按钮
+        handleSearch() {
+            this.getData();
         },
         // 删除操作
         handleDelete(row) {
@@ -514,8 +507,5 @@ export default {
     margin: auto;
     width: 40px;
     height: 40px;
-}
-.input-with-select{
-    background-color: #ffffff;
 }
 </style>

@@ -1,7 +1,8 @@
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 from backend.models import Datasources
 from backend.serializers import DatasourcesSerializer
-from backend.tools import reply
-from backend.tools import countReply
+from backend.tools import reply, dtReply, countReply
 
 class DatasourcesService():
 	
@@ -27,24 +28,36 @@ class DatasourcesService():
 			return reply(1, str(e))
 		return reply(0)
 
-	def readAll():
-		re = None
+	def readAll(pageIndex, pageSize):
 		try:
 			re = Datasources.objects.using('admin_db').all()
-			result = DatasourcesSerializer(re, many = True)
+			paginator = Paginator(re, pageSize)
+			page = paginator.page(pageIndex)
+		except PageNotAnInteger:
+			page = paginator.page(1)
+		except EmptyPage:
+			page = paginator.page(paginator.num_page)
 		except Exception as e:
 			return reply(1, str(e))
-		return result.data
+		result = DatasourcesSerializer(page, many = True)
+		total = Datasources.objects.using('admin_db').count()
+		return dtReply(result.data, total)
 
-	def readByCondition(select, key):
-		re = None
-		kvdict = {select: key}
+	def readByCondition(pageIndex, pageSize, select, key):
 		try:
+			kvdict = {select: key}
 			re = Datasources.objects.using('admin_db').filter(**kvdict)
-			result = DatasourcesSerializer(re, many = True)
+			paginator = Paginator(re, pageSize)
+			page = paginator.page(pageIndex)
+		except PageNotAnInteger:
+			page = paginator.page(1)
+		except EmptyPage:
+			page = paginator.page(paginator.num_page)
 		except Exception as e:
 			return reply(1, str(e))
-		return result.data
+		result = DatasourcesSerializer(page, many = True)
+		total = re.count()
+		return dtReply(result.data, total)
 
 	def readOne(id):
 		re = None

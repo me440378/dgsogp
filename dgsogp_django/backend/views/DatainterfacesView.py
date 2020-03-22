@@ -7,13 +7,15 @@ from backend.services import DatainterfacesService
 class DatainterfacesView(APIView):
 
 	def get(self, request):
+		pageIndex = request.GET.get('pageIndex')
+		pageSize = request.GET.get('pageSize')
 		select = request.GET.get('select')
 		key = request.GET.get('key')
 		if select and key:
-			result = DatainterfacesService.readByCondition(select, key)
+			result = DatainterfacesService.readByCondition(pageIndex, pageSize, select, key)
 			return Response(result)
 		else:
-			result = DatainterfacesService.readAll()
+			result = DatainterfacesService.readAll(pageIndex, pageSize)
 			return Response(result)
 
 	def post(self, request):

@@ -7,13 +7,15 @@ from backend.services import DatasourcesService
 class DatasourcesView(APIView):
 
 	def get(self, request):
+		pageIndex = request.GET.get('pageIndex')
+		pageSize = request.GET.get('pageSize')
 		select = request.GET.get('select')
 		key = request.GET.get('key')
 		if select and key:
-			result = DatasourcesService.readByCondition(select, key)
+			result = DatasourcesService.readByCondition(pageIndex, pageSize, select, key)
 			return Response(result)
 		else:
-			result = DatasourcesService.readAll()
+			result = DatasourcesService.readAll(pageIndex, pageSize)
 			return Response(result)
 
 	def post(self, request):

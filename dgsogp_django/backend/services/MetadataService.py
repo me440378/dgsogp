@@ -1,4 +1,5 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 from backend.models import Metadata
 from backend.serializers import MetadataSerializer
 from backend.tools import reply, dtReply
@@ -36,14 +37,20 @@ class MetadataService():
 		return dtReply(result.data, total)
 
 	def readByCondition(pageIndex, pageSize, select, key):
-		re = None
-		kvdict = {select: key}
 		try:
+			kvdict = {select: key}
 			re = Metadata.objects.using('admin_db').filter(**kvdict)
-			result = MetadataSerializer(re, many = True)
+			paginator = Paginator(re, pageSize)
+			page = paginator.page(pageIndex)
+		except PageNotAnInteger:
+			page = paginator.page(1)
+		except EmptyPage:
+			page = paginator.page(paginator.num_page)
 		except Exception as e:
 			return reply(1, str(e))
-		return result.data
+		result = MetadataSerializer(page, many = True)
+		total = re.count()
+		return dtReply(result.data, total)
 
 	def readOne(id):
 		re = None

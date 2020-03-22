@@ -14,13 +14,15 @@ import pymysql
 class DatabaseinterfacesView(APIView):
 
 	def get(self, request):
+		pageIndex = request.GET.get('pageIndex')
+		pageSize = request.GET.get('pageSize')
 		select = request.GET.get('select')
 		key = request.GET.get('key')
 		if select and key:
-			result = DatabaseinterfacesService.readByCondition(select, key)
+			result = DatabaseinterfacesService.readByCondition(pageIndex, pageSize, select, key)
 			return Response(result)
 		else:
-			result = DatabaseinterfacesService.readAll()
+			result = DatabaseinterfacesService.readAll(pageIndex, pageSize)
 			return Response(result)
 
 	def post(self, request):

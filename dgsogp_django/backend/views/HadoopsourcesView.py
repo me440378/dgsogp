@@ -7,13 +7,15 @@ from backend.services import HadoopsourcesService
 class HadoopsourcesView(APIView):
 
 	def get(self, request):
+		pageIndex = request.GET.get('pageIndex')
+		pageSize = request.GET.get('pageSize')
 		select = request.GET.get('select')
 		key = request.GET.get('key')
 		if select and key:
-			result = HadoopsourcesService.readByCondition(select, key)
+			result = HadoopsourcesService.readByCondition(pageIndex, pageSize, select, key)
 			return Response(result)
 		else:
-			result = HadoopsourcesService.readAll()
+			result = HadoopsourcesService.readAll(pageIndex, pageSize)
 			return Response(result)
 
 	def post(self, request):
