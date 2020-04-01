@@ -17,6 +17,7 @@ ALLOWED_HOSTS = [
     "localhost:8000",
     "localhost",
     "127.0.0.1",
+    "127.0.0.1:8888",
     "www.dgsogp.com",
     ]
 
@@ -30,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'dgsogp_django',
     #RESTful
     'rest_framework',
     #解决跨域
@@ -75,6 +77,7 @@ TEMPLATES = [
 CORS_ORIGIN_WHITELIST = [
     "http://127.0.0.1:8015",
     "http://127.0.0.1:8000",
+    "http://127.0.0.1:8888",
     "http://www.dgsogp.com",
 ]
 # CORS 允许携带Cookie
@@ -82,9 +85,9 @@ CORS_ORIGIN_WHITELIST = [
 
 #websocket
 import dwebsocket
-MIDDLEWARE_CLASSES = [
-    'dwebsocket.middleware.WebSocketMiddleware'  # 为所有的URL提供websocket，如果只是单独的视图需要可以不选
-]
+# MIDDLEWARE_CLASSES = [
+#     'dwebsocket.middleware.WebSocketMiddleware'  # 为所有的URL提供websocket，如果只是单独的视图需要可以不选
+# ]
 WEBSOCKET_ACCEPT_ALL=True   # 可以允许每一个单独的视图实用websockets
 WEBSOCKET_FACTORY_CLASS="dwebsocket.backends.uwsgi.factory.uWsgiWebSocketFactory"
 

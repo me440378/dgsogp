@@ -207,6 +207,9 @@
                     return
                 }
                 let key = this.cmd.line
+                if(key==null||key==''){
+                    return
+                }
                 this.websock.send(key)
                 this.cmd.line=''
                 this.cmd.content+=key+'\n'
