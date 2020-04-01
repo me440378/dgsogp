@@ -65,7 +65,7 @@
 
 <script>
 export default {
-    name: 'HadoopsourcesManage',
+    name: 'MetadataManage',
     data() {
         return {
             query: {

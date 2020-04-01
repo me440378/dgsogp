@@ -104,7 +104,7 @@
 
 <script>
     export default {
-        name: 'editor',
+        name: 'DatabaseCommandLine',
         data: function(){
             return {
                 websock: null,

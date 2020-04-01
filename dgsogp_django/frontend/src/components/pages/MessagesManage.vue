@@ -92,7 +92,7 @@
 
 <script>
     export default {
-        name: 'tabs',
+        name: 'MessageManage',
         data() {
             return {
                 message: 'first',

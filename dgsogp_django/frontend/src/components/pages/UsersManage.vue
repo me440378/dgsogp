@@ -8,11 +8,18 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-            <div class="handle-box">
-                <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
-                <el-button type="primary" icon="el-icon-lx-add" @click="handleRegister">添加用户</el-button>
-            </div>
+            <el-row class="handle-box">
+                <el-col :span="8">
+                    <el-input v-model="query.key" placeholder="" class="input-with-select">
+                        <el-select v-model="query.select" slot="prepend" placeholder="请选择" style="width: 130px;">
+                          <el-option label="ID" value="id"></el-option>
+                          <el-option label="用户名" value="username"></el-option>
+                          <el-option label="用户昵称" value="nickname"></el-option>
+                        </el-select>
+                        <el-button type="primary" icon="el-icon-search" @click="handleSearch" slot="append">搜索</el-button>
+                    </el-input>
+                </el-col>
+            </el-row>
             <el-table
                 :data="tableData"
                 border
@@ -132,14 +139,13 @@
 </template>
 
 <script>
-import { fetchData } from '../../api/index';
 export default {
     name: 'UsersManage',
     data() {
         return {
             query: {
-                name: '',
-                nickname: '',
+                select:'',
+                key:'',
                 pageIndex: 1,
                 pageSize: 10
             },
@@ -159,8 +165,6 @@ export default {
                     newpassword:'',
                 },
             },
-            idx: -1,
-            id: -1
         };
     },
     mounted() {
@@ -168,9 +172,17 @@ export default {
     },
     methods: {
         getData() {
+            let key = this.query
+            if (key.select&&key.key) {
+                
+            } else {
+                key.select=''
+                key.key=''
+            }
             var me = this
-            this.$get("/users").then(res=>{
-                me.tableData = res.data
+            this.$get(`/users?pageIndex=${key.pageIndex}&pageSize=${key.pageSize}&select=${key.select}&key=${key.key}`).then(res=>{
+                me.tableData = res.data.data
+                me.pageTotal = res.data.total
             }).catch(function(err){
                 console.log(err)
             })
