@@ -21,7 +21,15 @@ class MetadataService():
 			return reply(1, str(e))
 		return reply(0)
 
-	def readAll(pageIndex, pageSize):
+	def readAll():
+		try:
+			re = Metadata.objects.using('admin_db').all()
+			result = MetadataSerializer(re, many = True)
+		except Exception as e:
+			return reply(1, str(e))
+		return result.data
+
+	def readPage(pageIndex, pageSize):
 		try:
 			re = Metadata.objects.using('admin_db').all()
 			paginator = Paginator(re, pageSize)

@@ -13,7 +13,12 @@ SECRET_KEY = '%ebw&lr^y9$6kic^s^3c$*ufmti$s60+-2s8e*k(#8u2#&x0z@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost:8000",
+    "localhost",
+    "127.0.0.1",
+    "www.dgsogp.com",
+    ]
 
 
 # Application definition
@@ -68,8 +73,9 @@ TEMPLATES = [
 
 # CORS 跨域白名单
 CORS_ORIGIN_WHITELIST = [
-    "http://localhost:8015",
     "http://127.0.0.1:8015",
+    "http://127.0.0.1:8000",
+    "http://www.dgsogp.com",
 ]
 # CORS 允许携带Cookie
 # CORS_ALLOW_CREDENTIALS = True
@@ -80,6 +86,7 @@ MIDDLEWARE_CLASSES = [
     'dwebsocket.middleware.WebSocketMiddleware'  # 为所有的URL提供websocket，如果只是单独的视图需要可以不选
 ]
 WEBSOCKET_ACCEPT_ALL=True   # 可以允许每一个单独的视图实用websockets
+WEBSOCKET_FACTORY_CLASS="dwebsocket.backends.uwsgi.factory.uWsgiWebSocketFactory"
 
 # Add for vue.js
 STATICFILES_DIRS = [

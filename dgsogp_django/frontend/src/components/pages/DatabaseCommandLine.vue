@@ -169,7 +169,8 @@
                 this.textareaScroll()
             },
             initWebSocket(key){
-                this.websock = new WebSocket("ws://localhost:8000/api/1.0/databaseinterfaces/dbcli")
+                let websocketurl = this.WebSocketUrl
+                this.websock = new WebSocket(websocketurl)
 
                 let me = this
                 //连接成功

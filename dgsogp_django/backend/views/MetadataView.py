@@ -15,7 +15,7 @@ class MetadataView(APIView):
 			result = MetadataService.readByCondition(pageIndex, pageSize, select, key)
 			return Response(result)
 		else:
-			result = MetadataService.readAll(pageIndex, pageSize)
+			result = MetadataService.readPage(pageIndex, pageSize)
 			return Response(result)
 
 	def post(self, request):

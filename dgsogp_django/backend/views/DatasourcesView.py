@@ -15,7 +15,7 @@ class DatasourcesView(APIView):
 			result = DatasourcesService.readByCondition(pageIndex, pageSize, select, key)
 			return Response(result)
 		else:
-			result = DatasourcesService.readAll(pageIndex, pageSize)
+			result = DatasourcesService.readPage(pageIndex, pageSize)
 			return Response(result)
 
 	def post(self, request):

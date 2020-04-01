@@ -28,22 +28,21 @@ Vue.use(ElementUI, {
 /* adminMongo */
 Vue.prototype.adminMongoUrl = "http://192.168.191.10:8025/app/connection_list"
 
+// 开发环境
+var baseServer = "127.0.0.1:8000"
+// 生产环境
+// var baseServer = "www.dgsogp.com"
+
+
 /* 数据接口 */
-Vue.prototype.DataInterfacesBaseUrl = "http://127.0.0.1:8000/api/1.0/datainterfaces/data"
+Vue.prototype.DataInterfacesBaseUrl = "http://"+baseServer+"/api/1.0/datainterfaces/data"
+
+/* WebSocket */
+Vue.prototype.WebSocketUrl = "ws://"+baseServer+"/api/1.0/databaseinterfaces/dbcli"
 
 /* HTTP请求 */
 var Axios = axios;
-
-Vue.prototype.baseUrl = "http://127.0.0.1:8000/api/1.0"
-// Vue.prototype.toParams = function (obj) {
-//     var param = ""
-//     for(const name in obj) {
-//         if(typeof obj[name] != 'function') {
-//             param += "&" + name + "=" + encodeURI(obj[name])
-//         }
-//     }
-//     return param.substring(1)
-// }
+Vue.prototype.baseUrl = "http://"+baseServer+"/api/1.0"
 
 //POST
 Vue.prototype.$post=function(api, data){

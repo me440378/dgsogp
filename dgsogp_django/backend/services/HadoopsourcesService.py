@@ -17,7 +17,15 @@ class HadoopsourcesService():
 			return reply(1, str(e))
 		return reply(0)
 
-	def readAll(pageIndex, pageSize):
+	def readAll():
+		try:
+			re = Hadoopsources.objects.using('admin_db').all()
+			result = HadoopsourcesSerializer(re, many = True)
+		except Exception as e:
+			return reply(1, str(e))
+		return result.data
+
+	def readPage(pageIndex, pageSize):
 		try:
 			re = Hadoopsources.objects.using('admin_db').all()
 			paginator = Paginator(re, pageSize)

@@ -15,7 +15,7 @@ class DatainterfacesView(APIView):
 			result = DatainterfacesService.readByCondition(pageIndex, pageSize, select, key)
 			return Response(result)
 		else:
-			result = DatainterfacesService.readAll(pageIndex, pageSize)
+			result = DatainterfacesService.readPage(pageIndex, pageSize)
 			return Response(result)
 
 	def post(self, request):

@@ -15,7 +15,7 @@ class UsersView(APIView):
 			result = UsersService.readByCondition(pageIndex, pageSize, select, key)
 			return Response(result)
 		else:
-			result = UsersService.readAll(pageIndex, pageSize)
+			result = UsersService.readPage(pageIndex, pageSize)
 			return Response(result)
 
 	def post(self, request):

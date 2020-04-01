@@ -15,7 +15,7 @@ class HadoopsourcesView(APIView):
 			result = HadoopsourcesService.readByCondition(pageIndex, pageSize, select, key)
 			return Response(result)
 		else:
-			result = HadoopsourcesService.readAll(pageIndex, pageSize)
+			result = HadoopsourcesService.readPage(pageIndex, pageSize)
 			return Response(result)
 
 	def post(self, request):

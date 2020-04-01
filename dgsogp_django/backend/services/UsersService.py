@@ -27,7 +27,15 @@ class UsersService():
 				return reply(1, str(e))
 		return reply(0)
 
-	def readAll(pageIndex, pageSize):
+	def readAll():
+		try:
+			re = Users.objects.using('admin_db').all()
+			result = UsersSerializer(re, many = True)
+		except Exception as e:
+			return reply(1, str(e))
+		return result.data
+
+	def readPage(pageIndex, pageSize):
 		try:
 			re = Users.objects.using('admin_db').all()
 			paginator = Paginator(re, pageSize)

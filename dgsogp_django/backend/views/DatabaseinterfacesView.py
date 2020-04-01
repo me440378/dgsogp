@@ -22,7 +22,7 @@ class DatabaseinterfacesView(APIView):
 			result = DatabaseinterfacesService.readByCondition(pageIndex, pageSize, select, key)
 			return Response(result)
 		else:
-			result = DatabaseinterfacesService.readAll(pageIndex, pageSize)
+			result = DatabaseinterfacesService.readPage(pageIndex, pageSize)
 			return Response(result)
 
 	def post(self, request):
