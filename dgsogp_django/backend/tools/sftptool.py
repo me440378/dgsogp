@@ -2,9 +2,13 @@ import paramiko
 from stat import S_ISDIR
 import os
 
+from dgsogp_django.settings import BASE_DIR
+SSH_KEY_ROOT = os.path.join(BASE_DIR, "ssh-key")
+hadoop_cluster_path = os.path.join(SSH_KEY_ROOT, "hadoop_cluster")
+
 def getSftpClient(wserver):
     #密钥登录
-    privage_key = paramiko.RSAKey.from_private_key_file('./ssh-key/hadoop_cluster')
+    privage_key = paramiko.RSAKey.from_private_key_file(hadoop_cluster_path)
     t=paramiko.Transport((wserver, 22))#ftp
     t.connect(username = 'root',pkey=privage_key)
     SftpClient = paramiko.SFTPClient.from_transport(t)
