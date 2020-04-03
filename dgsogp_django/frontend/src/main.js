@@ -30,6 +30,7 @@ Vue.prototype.adminMongoUrl = "http://192.168.191.10:8025/app/connection_list"
 
 // 开发环境
 // var baseServer = "127.0.0.1:8000"
+// 中间件环境
 // var baseServer = "127.0.0.1:8888"
 // 生产环境
 var baseServer = "www.dgsogp.com"

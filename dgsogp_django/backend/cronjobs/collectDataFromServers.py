@@ -54,12 +54,19 @@ def collectDataFromServers():
 				HadoopClient.upload(hpath, local, overwrite=True)
 				#完成远程到本地到Hadoop集群的流程了
 				#之后要生成HadoopSource
-				hadoopsource = {
-					"state":0,
-					"source":hadoopGaS + target,
-					"datasource_id":datasource_id,
-				}
-				HadoopsourcesService.createOne(**hadoopsource)
+				#查找datasource_id对应的hadoopsource是否存在
+				hadoopsource = HadoopsourcesService.readByCondition('datasource_id',datasource_id)
+				if hadoopsource:
+					#存在
+					pass
+				else:
+					#不存在
+					hadoopsource = {
+						"state":0,
+						"source":hadoopGaS + target,
+						"datasource_id":datasource_id,
+					}
+					HadoopsourcesService.createOne(**hadoopsource)
 				#将状态为未处理的Datasources改为已完成
 				if state == 0:
 					DatasourcesService.finishOne(datasource_id)
@@ -88,13 +95,20 @@ def collectDataFromServers():
 				SftpClint.close()
 				#完成远程到本地到Hadoop集群的流程了
 				#之后要生成HadoopSource
-				hadoopsource = {
-					"state":0,
-					"source":hadoopGaS + target,
-					"datasource_id":datasource_id,
-				}
-				HadoopsourcesService.createOne(**hadoopsource)
-				#将状态为未处理的Datasources改为已完成
+				#查找datasource_id对应的hadoopsource是否存在
+				hadoopsource = HadoopsourcesService.readByCondition('datasource_id',datasource_id)
+				if hadoopsource:
+					#存在
+					pass
+				else:
+					#不存在
+					hadoopsource = {
+						"state":0,
+						"source":hadoopGaS + target,
+						"datasource_id":datasource_id,
+					}
+					HadoopsourcesService.createOne(**hadoopsource)
+					#将状态为未处理的Datasources改为已完成
 				if state == 0:
 					DatasourcesService.finishOne(datasource_id)
 			elif type == 2:

@@ -12,7 +12,7 @@ class HadoopsourcesView(APIView):
 		select = request.GET.get('select')
 		key = request.GET.get('key')
 		if select and key:
-			result = HadoopsourcesService.readByCondition(pageIndex, pageSize, select, key)
+			result = HadoopsourcesService.readPageByCondition(pageIndex, pageSize, select, key)
 			return Response(result)
 		else:
 			result = HadoopsourcesService.readPage(pageIndex, pageSize)

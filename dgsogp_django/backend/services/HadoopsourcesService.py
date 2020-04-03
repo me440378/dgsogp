@@ -40,7 +40,7 @@ class HadoopsourcesService():
 		total = Hadoopsources.objects.using('admin_db').count()
 		return dtReply(result.data, total)
 
-	def readByCondition(pageIndex, pageSize, select, key):
+	def readPageByCondition(pageIndex, pageSize, select, key):
 		try:
 			kvdict = {select: key}
 			re = Hadoopsources.objects.using('admin_db').filter(**kvdict)
@@ -57,10 +57,18 @@ class HadoopsourcesService():
 		return dtReply(result.data, total)
 
 	def readOne(id):
-		re = None
 		try:
 			re = Hadoopsources.objects.using('admin_db').get(pk = id)
 			result = HadoopsourcesSerializer(re)
+		except Exception as e:
+			return reply(1, str(e))
+		return result.data
+
+	def readByCondition(select, key):
+		try:
+			kvdict = {select: key}
+			re = Hadoopsources.objects.using('admin_db').filter(**kvdict)
+			result = HadoopsourcesSerializer(re, many = True)
 		except Exception as e:
 			return reply(1, str(e))
 		return result.data

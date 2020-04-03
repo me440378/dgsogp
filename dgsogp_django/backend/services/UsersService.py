@@ -50,7 +50,7 @@ class UsersService():
 		total = Users.objects.using('admin_db').count()
 		return dtReply(result.data, total)
 
-	def readByCondition(pageIndex, pageSize, select, key):
+	def readPageByCondition(pageIndex, pageSize, select, key):
 		try:
 			kvdict = {select: key}
 			re = Users.objects.using('admin_db').filter(**kvdict)

@@ -19,7 +19,7 @@ class DatabaseinterfacesView(APIView):
 		select = request.GET.get('select')
 		key = request.GET.get('key')
 		if select and key:
-			result = DatabaseinterfacesService.readByCondition(pageIndex, pageSize, select, key)
+			result = DatabaseinterfacesService.readPageByCondition(pageIndex, pageSize, select, key)
 			return Response(result)
 		else:
 			result = DatabaseinterfacesService.readPage(pageIndex, pageSize)

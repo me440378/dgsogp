@@ -12,7 +12,7 @@ class DatainterfacesView(APIView):
 		select = request.GET.get('select')
 		key = request.GET.get('key')
 		if select and key:
-			result = DatainterfacesService.readByCondition(pageIndex, pageSize, select, key)
+			result = DatainterfacesService.readPageByCondition(pageIndex, pageSize, select, key)
 			return Response(result)
 		else:
 			result = DatainterfacesService.readPage(pageIndex, pageSize)

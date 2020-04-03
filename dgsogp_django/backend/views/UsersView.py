@@ -12,7 +12,7 @@ class UsersView(APIView):
 		select = request.GET.get('select')
 		key = request.GET.get('key')
 		if select and key:
-			result = UsersService.readByCondition(pageIndex, pageSize, select, key)
+			result = UsersService.readPageByCondition(pageIndex, pageSize, select, key)
 			return Response(result)
 		else:
 			result = UsersService.readPage(pageIndex, pageSize)
