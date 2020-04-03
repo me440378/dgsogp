@@ -105,9 +105,9 @@ CRONJOBS = [
     #从远端采集到本地再上传HDFS，创建Hadoopsources
     ('* * * * *', 'backend.cronjobs.collectDataFromServers'),
     #将HDFS上的文件下载到本地，创建Metadata
-    ('* * * * *', 'backend.cronjobs.scanHadoopPutInDB'),
-    #将HDFS上的文件下载到本地，根据Metadata入库
     ('* * * * *', 'backend.cronjobs.scanHadoopTagMetadata'),
+    #将HDFS上的文件下载到本地，根据Metadata入库
+    ('* * * * *', 'backend.cronjobs.scanMetadataPutInDB'),
     #清空本地暂存目录
     ('0 0 * * *', 'backend.cronjobs.freeLocalBaseDir'),
 ]

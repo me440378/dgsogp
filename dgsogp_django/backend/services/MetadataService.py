@@ -69,6 +69,15 @@ class MetadataService():
 			return reply(1, str(e))
 		return result.data
 
+	def readByCondition(select, key):
+		try:
+			kvdict = {select: key}
+			re = Metadata.objects.using('admin_db').filter(**kvdict)
+			result = MetadataSerializer(re, many = True)
+		except Exception as e:
+			return reply(1, str(e))
+		return result.data
+
 	def updateOne(id, kvdict):
 		try:
 			Metadata.objects.using('admin_db').filter(pk = id).update(**kvdict)

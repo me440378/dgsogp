@@ -62,7 +62,7 @@ def collectDataFromServers():
 				else:
 					#不存在
 					hadoopsource = {
-						"state":0,
+						"state":state,
 						"source":hadoopGaS + target,
 						"datasource_id":datasource_id,
 					}
@@ -103,7 +103,7 @@ def collectDataFromServers():
 				else:
 					#不存在
 					hadoopsource = {
-						"state":0,
+						"state":state,
 						"source":hadoopGaS + target,
 						"datasource_id":datasource_id,
 					}

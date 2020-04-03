@@ -49,30 +49,38 @@ def scanHadoopTagMetadata():
 				mstate = getMetadataState(dstate, putindb)
 				if related == 0:
 					#关系型
-					amount = getMetadataAmount(local)
-					feature = getMetadataFeature(local, ',')
-					metadata = {
-						"source":source,
-						"amount":amount,
-						"feature":feature,
-						"hashsum":hashsum,
-						"hadoopsource_id":hadoopsource_id,
-						"format":format,
-						"state":mstate,
-					}
-					MetadataService.createOne(**metadata)
+					metadata = MetadataService.readByCondition('source', source)
+					if metadata:
+						pass
+					else:
+						amount = getMetadataAmount(local)
+						feature = getMetadataFeature(local, ',')
+						metadata = {
+							"source":source,
+							"amount":amount,
+							"feature":feature,
+							"hashsum":hashsum,
+							"hadoopsource_id":hadoopsource_id,
+							"format":format,
+							"state":mstate,
+						}
+						MetadataService.createOne(**metadata)
 					#将状态为未处理的Datasources改为已完成
 					if hstate == 0:
 						HadoopsourcesService.finishOne(hadoopsource_id)
 				elif related == 1:
-					metadata = {
-						"source":source,
-						"hashsum":hashsum,
-						"hadoopsource_id":hadoopsource_id,
-						"format":format,
-						"state":mstate,
-					}
-					MetadataService.createOne(**metadata)
+					metadata = MetadataService.readByCondition('source', source)
+					if metadata:
+						pass
+					else:
+						metadata = {
+							"source":source,
+							"hashsum":hashsum,
+							"hadoopsource_id":hadoopsource_id,
+							"format":format,
+							"state":mstate,
+						}
+						MetadataService.createOne(**metadata)
 					#将状态为未处理的Datasources改为已完成
 					if hstate == 0:
 						HadoopsourcesService.finishOne(hadoopsource_id)
@@ -93,30 +101,38 @@ def scanHadoopTagMetadata():
 					mstate = getMetadataState(dstate, putindb)
 					if related == 0:
 						#关系型
-						amount = getMetadataAmount(local)
-						feature = getMetadataFeature(local, ',')
-						metadata = {
-							"source":hdfsfile,
-							"amount":amount,
-							"feature":feature,
-							"hashsum":hashsum,
-							"hadoopsource_id":hadoopsource_id,
-							"format":format,
-							"state":mstate,
-						}
-						MetadataService.createOne(**metadata)
+						metadata = MetadataService.readByCondition('source', source)
+						if metadata:
+							pass
+						else:
+							amount = getMetadataAmount(local)
+							feature = getMetadataFeature(local, ',')
+							metadata = {
+								"source":hdfsfile,
+								"amount":amount,
+								"feature":feature,
+								"hashsum":hashsum,
+								"hadoopsource_id":hadoopsource_id,
+								"format":format,
+								"state":mstate,
+							}
+							MetadataService.createOne(**metadata)
 						#将状态为未处理的Hadoopsources改为已完成
 						if hstate == 0:
 							HadoopsourcesService.finishOne(hadoopsource_id)
 					elif related == 1:
-						metadata = {
-							"source":hdfsfile,
-							"hashsum":hashsum,
-							"hadoopsource_id":hadoopsource_id,
-							"format":format,
-							"state":mstate,
-						}
-						MetadataService.createOne(**metadata)
+						metadata = MetadataService.readByCondition('source', hdfsfile)
+						if metadata:
+							pass
+						else:
+							metadata = {
+								"source":hdfsfile,
+								"hashsum":hashsum,
+								"hadoopsource_id":hadoopsource_id,
+								"format":format,
+								"state":mstate,
+							}
+							MetadataService.createOne(**metadata)
 						#将状态为未处理的Hadoopsources改为已完成
 						if hstate == 0:
 							HadoopsourcesService.finishOne(hadoopsource_id)

@@ -69,6 +69,15 @@ class DatainterfacesService():
 			return reply(1, str(e))
 		return result.data
 
+	def readByCondition(select, key):
+		try:
+			kvdict = {select: key}
+			re = Datainterfaces.objects.using('admin_db').filter(**kvdict)
+			result = DatainterfacesSerializer(re, many = True)
+		except Exception as e:
+			return reply(1, str(e))
+		return result.data
+
 	def updateOne(id, kvdict):
 		try:
 			Datainterfaces.objects.using('admin_db').filter(pk = id).update(**kvdict)
