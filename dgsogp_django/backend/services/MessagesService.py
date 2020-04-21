@@ -6,7 +6,7 @@ from backend.tools import reply, dtReply
 
 class MessagesService():
 
-	def createOne(name, content, status):
+	def createOne(name, content, status = 0):
 		try:
 			message = Messages.objects.using('admin_db').create(
 				name = name,

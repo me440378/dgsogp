@@ -100,29 +100,26 @@
             <el-col :span="24">
                 <el-card shadow="hover" style="height:280px;">
                     <div slot="header" class="clearfix">
-                        <span>系统通知</span>
-                        <!-- <el-button style="float: right; padding: 3px 0" type="text">添加</el-button> -->
+                        <el-row>
+                            <el-col :span="2">
+                                <span style="font-size: 20px;">通知管理</span>
+                            </el-col>
+                            <el-col :span="1">
+                                <el-button
+                                    type="primary"
+                                    @click="handleJumpMessages"
+                                >进入</el-button>
+                            </el-col>
+                        </el-row>
                     </div>
-                    <el-table :show-header="false" :data="NoticeList" style="width:100%;">
-                        <!-- <el-table-column width="40">
-                            <template slot-scope="scope">
-                                <el-checkbox v-model="scope.row.status"></el-checkbox>
-                            </template>
-                        </el-table-column> -->
+                    <el-table :show-header="false" :data="MessagesList" style="width:100%;">
                         <el-table-column>
                             <template slot-scope="scope">
                                 <div
                                     class="todo-item"
-                                    :class="{'todo-item-del': scope.row.status}"
-                                >{{scope.row.title}}</div>
+                                >{{scope.row.name}}</div>
                             </template>
                         </el-table-column>
-                        <!-- <el-table-column width="60">
-                            <template>
-                                <i class="el-icon-edit"></i>
-                                <i class="el-icon-delete"></i>
-                            </template>
-                        </el-table-column> -->
                     </el-table>
                 </el-card>
             </el-col>
@@ -143,14 +140,12 @@ export default {
             datainterfacesCount:0,
             databaseinterfacesCount:0,
             usersCount:0,
-            NoticeList: [
+            MessagesList: [
                 {
-                    title: '上次登录时间和上次登录地点记录功能无法使用，前端页面显示只是示例',
-                    status: false
+                    name: '上次登录时间和上次登录地点记录功能无法使用，前端页面显示只是示例'
                 },
                 {
-                    title: '今天要修复100个bug',
-                    status: false
+                    name: '今天要修复100个bug'
                 },
             ],
         };
@@ -182,6 +177,16 @@ export default {
             }).catch(function(err){
                 console.log(err)
             })
+            this.$get(`/messages?pageIndex=1&pageSize=1000&select=status&key=0`).then(res=>{
+                me.MessagesList = res.data.data
+            }).catch(function(err){
+                console.log(err)
+            })
+        },
+        handleJumpMessages(){
+            this.$router.push({
+               path:"/messages"
+            });
         }
     }
 };
