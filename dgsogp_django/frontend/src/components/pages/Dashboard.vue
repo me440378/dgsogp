@@ -1,8 +1,8 @@
 <template>
     <div>
-        <el-row :gutter="20">
+        <el-row :gutter="10">
             <el-col :span="8">
-                <el-card shadow="hover" class="mgb20" style="height:252px;">
+                <el-card shadow="hover" class="mgtb5" style="height:236px;">
                     <div class="user-info">
                         <!-- <img src="../../assets/img/img.jpg" class="user-avator" alt /> -->
                         <div class="grid-content">
@@ -22,17 +22,9 @@
                         <span>广州</span>
                     </div>
                 </el-card>
-                <el-card shadow="hover" style="height:252px;">
-                    <div slot="header" class="clearfix">
-                        <span>Hadoop集群运行状况</span>
-                    </div>磁盘容量
-                    <el-progress :percentage="71.3" color="#42b983"></el-progress>CPU使用率
-                    <el-progress :percentage="24.1" color="#f1e05a"></el-progress>内存使用率
-                    <el-progress :percentage="13.7"></el-progress>
-                </el-card>
             </el-col>
             <el-col :span="16">
-                <el-row :gutter="20" class="mgb20">
+                <el-row :gutter="20" class="mgtb5" style="height:120px;">
                     <el-col :span="8">
                         <el-card shadow="hover" :body-style="{padding: '0px'}">
                             <div class="grid-content grid-con-1">
@@ -67,14 +59,25 @@
                         </el-card>
                     </el-col>
                 </el-row>
-                <el-row :gutter="20" class="mgb20">
+                <el-row :gutter="20" class="mgtb5" style="height:120px;">
                     <el-col :span="8">
                         <el-card shadow="hover" :body-style="{padding: '0px'}">
-                            <div class="grid-content grid-con-4">
-                                <i class="el-icon-lx-global grid-con-icon"></i>
+                            <div class="grid-content grid-con-5">
+                                <i class="el-icon-lx-shop grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">4</div>
-                                    <div>服务器</div>
+                                    <div class="grid-num">{{datainterfacesCount}}</div>
+                                    <div>数据接口</div>
+                                </div>
+                            </div>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-card shadow="hover" :body-style="{padding: '0px'}">
+                            <div class="grid-content grid-con-6">
+                                <i class="el-icon-lx-shopfill grid-con-icon"></i>
+                                <div class="grid-cont-right">
+                                    <div class="grid-num">{{databaseinterfacesCount}}</div>
+                                    <div>数据库接口</div>
                                 </div>
                             </div>
                         </el-card>
@@ -90,18 +93,11 @@
                             </div>
                         </el-card>
                     </el-col>
-                    <el-col :span="8">
-                        <el-card shadow="hover" :body-style="{padding: '0px'}">
-                            <div class="grid-content grid-con-6">
-                                <i class="el-icon-lx-shopfill grid-con-icon"></i>
-                                <div class="grid-cont-right">
-                                    <div class="grid-num">0</div>
-                                    <div>数据库</div>
-                                </div>
-                            </div>
-                        </el-card>
-                    </el-col>
                 </el-row>
+            </el-col>
+        </el-row>
+        <el-row :gutter="10">
+            <el-col :span="24">
                 <el-card shadow="hover" style="height:280px;">
                     <div slot="header" class="clearfix">
                         <span>系统通知</span>
@@ -131,24 +127,10 @@
                 </el-card>
             </el-col>
         </el-row>
-        <el-row :gutter="20">
-            <el-col :span="12">
-                <el-card shadow="hover">
-                    <schart ref="bar" class="schart" canvasId="bar" :options="options"></schart>
-                </el-card>
-            </el-col>
-            <el-col :span="12">
-                <el-card shadow="hover">
-                    <schart ref="line" class="schart" canvasId="line" :options="options2"></schart>
-                </el-card>
-            </el-col>
-        </el-row>
     </div>
 </template>
 
 <script>
-import Schart from 'vue-schart';
-import bus from '../common/bus';
 export default {
     name: 'dashboard',
     data() {
@@ -158,12 +140,10 @@ export default {
             datasourcesCount:0,
             hadoopsourcesCount:0,
             metadataCount:0,
+            datainterfacesCount:0,
+            databaseinterfacesCount:0,
             usersCount:0,
             NoticeList: [
-                {
-                    title: 'Hadoop服务器集群的监控功能还无法使用，前端页面显示只是示例',
-                    status: false
-                },
                 {
                     title: '上次登录时间和上次登录地点记录功能无法使用，前端页面显示只是示例',
                     status: false
@@ -173,87 +153,7 @@ export default {
                     status: false
                 },
             ],
-            data: [
-                {
-                    name: '2018/09/04',
-                    value: 1083
-                },
-                {
-                    name: '2018/09/05',
-                    value: 941
-                },
-                {
-                    name: '2018/09/06',
-                    value: 1139
-                },
-                {
-                    name: '2018/09/07',
-                    value: 816
-                },
-                {
-                    name: '2018/09/08',
-                    value: 327
-                },
-                {
-                    name: '2018/09/09',
-                    value: 228
-                },
-                {
-                    name: '2018/09/10',
-                    value: 1065
-                }
-            ],
-            options: {
-                type: 'bar',
-                title: {
-                    text: '昨天Hadoop集群平均运行状况'
-                },
-                xRorate: 25,
-                labels: ['磁盘容量', 'CPU使用率', '内存使用率'],
-                datasets: [
-                    {
-                        label: 'Server-00',
-                        data: [234, 278, 270]
-                    },
-                    {
-                        label: 'Server-01',
-                        data: [164, 178, 190]
-                    },
-                    {
-                        label: 'Server-02',
-                        data: [144, 198, 150]
-                    },
-                    {
-                        label: 'Server-03',
-                        data: [234, 178, 135]
-                    }
-                ]
-            },
-            options2: {
-                type: 'line',
-                title: {
-                    text: '前五天Hadoop集群服务器平均运行状况'
-                },
-                labels: ['前5天', '前4天', '前3天', '前天', '昨天'],
-                datasets: [
-                    {
-                        label: '磁盘容量占比',
-                        data: [234, 278, 270, 190, 230]
-                    },
-                    {
-                        label: 'CPU使用率',
-                        data: [164, 178, 150, 135, 160]
-                    },
-                    {
-                        label: '内存使用率',
-                        data: [74, 118, 200, 235, 90]
-                    }
-                ]
-            }
         };
-    },
-    components: {
-        Schart
     },
     computed: {
         role() {
@@ -264,15 +164,6 @@ export default {
         this.getData()
     },
     created() {
-        this.handleListener();
-        this.changeDate();
-    },
-    activated() {
-        this.handleListener();
-    },
-    deactivated() {
-        window.removeEventListener('resize', this.renderChart);
-        bus.$off('collapse', this.handleBus);
     },
     methods: {
         getData(){
@@ -285,31 +176,12 @@ export default {
                 me.datasourcesCount = res.data.datasourcesCount
                 me.hadoopsourcesCount = res.data.hadoopsourcesCount
                 me.metadataCount = res.data.metadataCount
+                me.datainterfacesCount = res.data.datainterfacesCount
+                me.databaseinterfacesCount = res.data.databaseinterfacesCount
                 me.usersCount = res.data.usersCount
             }).catch(function(err){
                 console.log(err)
             })
-        },
-        changeDate() {
-            const now = new Date().getTime();
-            this.data.forEach((item, index) => {
-                const date = new Date(now - (6 - index) * 86400000);
-                item.name = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
-            });
-        },
-        handleListener() {
-            bus.$on('collapse', this.handleBus);
-            // 调用renderChart方法对图表进行重新渲染
-            window.addEventListener('resize', this.renderChart);
-        },
-        handleBus(msg) {
-            setTimeout(() => {
-                this.renderChart();
-            }, 200);
-        },
-        renderChart() {
-            this.$refs.bar.renderChart();
-            this.$refs.line.renderChart();
         }
     }
 };
@@ -432,8 +304,9 @@ export default {
     margin-left: 70px;
 }
 
-.mgb20 {
-    margin-bottom: 20px;
+.mgtb5 {
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .todo-item {

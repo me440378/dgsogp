@@ -7,6 +7,8 @@ from backend.services import UsersService
 from backend.services import DatasourcesService
 from backend.services import HadoopsourcesService
 from backend.services import MetadataService
+from backend.services import DatainterfacesService
+from backend.services import DatabaseinterfacesService
 from backend.tools import reply
 
 class FrontendService():
@@ -16,12 +18,16 @@ class FrontendService():
 		datasourcesCount = DatasourcesService.countAll()
 		hadoopsourcesCount = HadoopsourcesService.countAll()
 		metadataCount = MetadataService.countAll()
+		datainterfacesCount = DatainterfacesService.countAll()
+		databaseinterfacesCount = DatabaseinterfacesService.countAll()
 		usersCount = UsersService.countAll()
 		return {
 			"user": user,
 			"datasourcesCount": datasourcesCount,
 			"hadoopsourcesCount": hadoopsourcesCount,
 			"metadataCount": metadataCount,
+			"datainterfacesCount": datainterfacesCount,
+			"databaseinterfacesCount": databaseinterfacesCount,
 			"usersCount" : usersCount,
 		}
 
