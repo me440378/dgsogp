@@ -26,7 +26,7 @@ Vue.use(ElementUI, {
 });
 
 /* adminMongo */
-Vue.prototype.adminMongoUrl = "http://192.168.191.10:8025/app/connection_list"
+Vue.prototype.adminMongoUrl = "http://127.0.0.1:2017/app/connection_list"
 
 // 开发环境
 // var baseServer = "127.0.0.1:8000"
