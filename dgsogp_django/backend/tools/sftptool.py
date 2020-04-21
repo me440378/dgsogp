@@ -4,6 +4,7 @@ import os
 
 from dgsogp_django.settings import BASE_DIR
 SSH_KEY_ROOT = os.path.join(BASE_DIR, "ssh-key")
+# 该密钥需要系统使用者自己分发，并且网络环境有DNS服务器或本地域名映射
 hadoop_cluster_path = os.path.join(SSH_KEY_ROOT, "hadoop_cluster")
 
 def getSftpClient(wserver):

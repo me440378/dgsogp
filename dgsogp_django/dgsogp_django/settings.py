@@ -146,6 +146,22 @@ DATABASE_APPS_MAPPING = {
     'data_db': 'data_db',
 }
 
+# MongoDB
+MONGO_DATA_DB = {
+    "host":"127.0.0.1",
+    "port":27017,
+    "username":"dgsogp_data",
+    "password":"123456",
+    "authSource":"dgsogp_data_db"
+}
+
+# HDFS
+HADOOP_BASE = {
+    "url":"http://hadoop-server-test:50070",
+    "user":"hadoop",
+    "root":"/"
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 

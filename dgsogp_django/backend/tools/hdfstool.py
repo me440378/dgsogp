@@ -1,7 +1,9 @@
 from hdfs import InsecureClient
 
+from dgsogp_django.settings import HADOOP_BASE
+
 def getHadoopClient():
-	return InsecureClient('http://hadoop-server-test:50070', user='hadoop', root='/')
+	return InsecureClient(**HADOOP_BASE)
 
 def makeHdfsPath(client, hdfsPath):
     if not client.status(hdfsPath,strict=False):

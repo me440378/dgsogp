@@ -1,14 +1,10 @@
 from pymongo import MongoClient
 
+from dgsogp_django.settings import MONGO_DATA_DB
+
 def getMongoDB():
-	client = MongoClient(
-			host = '192.168.191.10',
-			port = 27017,
-			username = 'dgsogp_data',
-			password = '123456',
-			authSource = 'dgsogp_data_db',
-		)
-	return client.get_database('dgsogp_data_db')
+	client = MongoClient(**MONGO_DATA_DB)
+	return client.get_database(MONGO_DATA_DB["authSource"])
 
 def checkCollection(db, collectionname):
 	collection = db.get_collection(collectionname)
