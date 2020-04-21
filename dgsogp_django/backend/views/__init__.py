@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 
 from .UsersView import *
+from .MessagesView import *
 from .DatasourcesView import *
 from .HadoopsourcesView import *
 from .MetadataView import *

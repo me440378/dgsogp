@@ -3,6 +3,8 @@ from django.urls import include, path, re_path
 from backend.views import index
 from backend.views import UsersView
 from backend.views import UsersDetailView
+from backend.views import MessagesView
+from backend.views import MessagesDetailView
 from backend.views import PasswordView
 from backend.views import ForcePasswordView
 from backend.views import LoginView
@@ -34,6 +36,9 @@ urlpatterns = [
     re_path(r'users/password/(?P<id>\d+)', PasswordView.as_view()),
     re_path(r'users/forcepassword/(?P<id>\d+)', ForcePasswordView.as_view()),
     path(r'users/login', LoginView.as_view()),
+    ##MessagesView
+    path(r'messages', MessagesView.as_view()),
+    re_path(r'messages/(?P<id>\d+)', MessagesDetailView.as_view()),
     ##DatasourcesView
     path(r'datasources', DatasourcesView.as_view()),
     re_path(r'datasources/(?P<id>\d+)', DatasourcesDetailView.as_view()),

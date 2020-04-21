@@ -1,4 +1,5 @@
 from .UsersSerializer import *
+from .MessagesSerializer import *
 from .DatasourcesSerializer import *
 from .HadoopsourcesSerializer import *
 from .MetadataSerializer import *

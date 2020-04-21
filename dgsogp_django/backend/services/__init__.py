@@ -1,4 +1,5 @@
 from .UsersService import *
+from .MessagesService import *
 from .DatasourcesService import *
 from .HadoopsourcesService import *
 from .MetadataService import *
