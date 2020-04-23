@@ -19,6 +19,12 @@
                         <el-button type="primary" icon="el-icon-search" @click="handleSearch" slot="append">搜索</el-button>
                     </el-input>
                 </el-col>
+                <el-col :span="1">
+                    &nbsp;
+                </el-col>
+                <el-col :span="2">
+                    <el-button type="primary" icon="el-icon-add" @click="handleRegister" >添加用户</el-button>
+                </el-col>
             </el-row>
             <el-table
                 :data="tableData"

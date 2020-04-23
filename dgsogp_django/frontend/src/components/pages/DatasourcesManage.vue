@@ -281,6 +281,7 @@ export default {
                     source:'',
                     putindb:'',
                     related:'',
+                    pattern:'',
                     target:'',
                     state:'',
                     content:'',
